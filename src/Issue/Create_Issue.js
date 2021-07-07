@@ -9,7 +9,7 @@ import DatePicker from 'react-native-datepicker';
 
 const newIssue =({route, navigation}) =>{
 
-    const[lang, setLang]=useState();
+    const[lang, setLang]=useState('');
     const[name, setName]=useState('');
     const[content, setContent]=useState('');
 
@@ -18,6 +18,9 @@ const newIssue =({route, navigation}) =>{
 
     const[classify, setClassify]= useState();
     const[pick_classify, setPick_classify]= useState();
+
+    const[loss, setLoss]=useState();
+    const[pick_loss, setPick_loss]=useState();
 
     const[dept, setDept]=useState([]);
     const[pick_dept, setPick_dept]= useState([]);
@@ -36,6 +39,10 @@ const newIssue =({route, navigation}) =>{
             var res_loc = await fetch('http://192.168.0.12:8080/api/HSE5S/GetLocation');
             var json_res_loc = await res_loc.json();
             setLocation(json_res_loc);
+
+            var res_los = await fetch('http://192.168.0.12:8080/api/HSE5S/GetLoss');
+            var json_res_los = await res_los.json();
+            setLoss(json_res_los);
 
             var res_clas = await fetch('http://192.168.0.12:8080/api/HSE5S/GetClassify');
             var json_res_clas = await res_clas.json();
@@ -214,7 +221,7 @@ return(
     <ScrollView>
         <View style={styles.container}>
             <TextInput
-                        label='Name Issue'
+                        label={lang?ngonngu.stringLang[lang].new_issue.name_issue:'hi'}
                         style={styles.input}
                         value={name}
                         theme = {theme}
@@ -222,7 +229,7 @@ return(
                         onChangeText={text => setName( text )}
                     />
             <TextInput
-                        label='Content'
+                        label={lang?ngonngu.stringLang[lang].new_issue.content:'hi'}
                         style={styles.input_content}
                         value={content}
                         theme = {theme}
@@ -230,7 +237,7 @@ return(
                         onChangeText={text => setContent( text )}
                     />
             
-            <Text style={styles.input}>Location</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.location:'hi'}</Text>
             <Picker selectedValue={pick_location}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
                 onValueChange={(itemValue, itemIndex)=>{setPick_location(itemValue)}}>
@@ -239,7 +246,7 @@ return(
                 }):<Picker.Item label='Location' value='loc_id'/>}
                 
             </Picker>
-            <Text style={styles.input}>Classification</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.classification:'hi'}</Text>
             <Picker selectedValue={pick_classify}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
                 onValueChange={(itemValue, itemIndex)=>{setPick_classify(itemValue)}}>
@@ -247,14 +254,24 @@ return(
                     return <Picker.Item label={item.Name_Classify} value={item.ID_Classify} key={key} />
                 }):<Picker.Item label='Class' value='clas_id'/>}
             </Picker>
-            <Text style={styles.input}>Department Assignment</Text>
+
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.loss:'hi'}</Text>
+            <Picker selectedValue={pick_classify}
+                style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
+                onValueChange={(itemValue, itemIndex)=>{setPick_loss(itemValue)}}>
+                {loss?loss.map((item, key)=>{
+                    return <Picker.Item label={item.Name_Level} value={item.ID_Level} key={key} />
+                }):<Picker.Item label='Loss' value='loss_id'/>}
+            </Picker>
+            
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.dept:'hi'}</Text>
             <MultiSelect
                 hideTags
                 items={dept?dept:[{'key':'value'}]}
                 uniqueKey="ID_Department"
                 onSelectedItemsChange={onSelectedItemsChange}
                 selectedItems={pick_dept}
-                selectText="Pick Department"
+                selectText={lang?ngonngu.stringLang[lang].new_issue.pick_dept:'hi'}
                 searchInputPlaceholderText="Search Dept..."
                 textInputProps={{autoFocus:false}}
                 onChangeInput={(text) => console.log(text)}
@@ -270,7 +287,7 @@ return(
                 submitButtonText="Submit"
             />
             <View style={{flexDirection:'row'}}>
-            <Text style={styles.input}>Deadline</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.deadline:'hi'}</Text>
             <DatePicker
                 style={styles.datePickerStyle}
                 date={date} // Initial date from state
@@ -299,10 +316,10 @@ return(
             />
             </View>
             <Button  style={styles.input_content} mode="contained" onPress={() => setModal(true)}>
-                Upload Image
+            {lang?ngonngu.stringLang[lang].new_issue.photo:'hi'}
             </Button>
             <Button  style={styles.input_content} mode="contained" onPress={NEW_ISSUE}>
-                SEND
+            {lang?ngonngu.stringLang[lang].new_issue.submit:'hi'}
             </Button>
           
 
@@ -320,14 +337,14 @@ return(
                     />
                     <View style={styles.buttonModalView}>
                         <Button style={styles.input_content} mode="contained" onPress={() => _takePhoto()}>
-                            Camera
+                        {lang?ngonngu.stringLang[lang].new_issue.camera:'hi'}
                         </Button>
                         <Button  style={styles.input_content} mode="contained" onPress={() => _uploadImage()}>
-                            Gallery
+                        {lang?ngonngu.stringLang[lang].new_issue.library:'hi'}
                         </Button>
                     </View>
                     <Button style={styles.input_content} mode="contained" onPress={() => setModal(false)}>
-                        Cancel
+                      {lang?ngonngu.stringLang[lang].new_issue.cancel:'hi'}
                     </Button>
                 </View>
 
