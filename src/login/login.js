@@ -13,6 +13,8 @@ import {
   LogBox
 } from "react-native";
 
+import config from '../js_helper/configuration';
+
 import test_vcl from "../language/stringLanguage";
  
 const login=({route, navigation})=> {
@@ -54,7 +56,7 @@ const login=({route, navigation})=> {
   {
     try
     {
-      let res = await fetch('http://192.168.0.12:8080/api/HSE5S/Login', settings);
+      let res = await fetch(config.api_server+'/api/HSE5S/Login', settings);
       let json_res = await res.json();
      
       if(json_res === "NG" || res.status !== 200)

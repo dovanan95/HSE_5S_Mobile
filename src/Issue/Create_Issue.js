@@ -6,6 +6,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ngonngu from '../language/stringLanguage';
 import MultiSelect from 'react-native-multiple-select'
 import DatePicker from 'react-native-datepicker';
+import config from '../js_helper/configuration';
 
 const newIssue =({route, navigation}) =>{
 
@@ -36,19 +37,19 @@ const newIssue =({route, navigation}) =>{
     useEffect(()=>{
         async function getItems()
         {
-            var res_loc = await fetch('http://192.168.0.12:8080/api/HSE5S/GetLocation');
+            var res_loc = await fetch(config.api_server+ '/api/HSE5S/GetLocation');
             var json_res_loc = await res_loc.json();
             setLocation(json_res_loc);
 
-            var res_los = await fetch('http://192.168.0.12:8080/api/HSE5S/GetLoss');
+            var res_los = await fetch(config.api_server+ '/api/HSE5S/GetLoss');
             var json_res_los = await res_los.json();
             setLoss(json_res_los);
 
-            var res_clas = await fetch('http://192.168.0.12:8080/api/HSE5S/GetClassify');
+            var res_clas = await fetch(config.api_server+ '/api/HSE5S/GetClassify');
             var json_res_clas = await res_clas.json();
             setClassify(json_res_clas);
 
-            var res_dept = await fetch('http://192.168.0.12:8080/api/HSE5S/GetDepartment');
+            var res_dept = await fetch(config.api_server+ '/api/HSE5S/GetDepartment');
             var json_res_dept = await res_dept.json();
             for(var k in json_res_dept)
             {
@@ -73,7 +74,17 @@ const newIssue =({route, navigation}) =>{
     LogBox.ignoreAllLogs();
 
     const NEW_ISSUE = async()=>{
-        alert('ok');
+      _send_to_server();
+      if(picture_server_url !== '')
+      {
+        //do submit
+        console.log(picture_server_url);
+      }
+      else
+      {
+        alert('Failed!!!');
+        console.log(picture_server_url);
+      }
     }
 
     const requestCameraPermission = async () => {
@@ -130,7 +141,7 @@ const newIssue =({route, navigation}) =>{
               if (isCameraPermitted && isStoragePermitted) {
                 launchCamera(options, (response) => {
                   console.log('Response = ', response);
-                  console.log('Response =', response.assets?response.assets[0].uri:'');
+                  console.log('Response =', response.assets?response.assets[0].fileSize:'');
           
                   if (response.didCancel) {
                     alert('User cancelled camera picker');
@@ -148,7 +159,7 @@ const newIssue =({route, navigation}) =>{
                   var uri = response.assets?response.assets[0].uri:'';
                   var type = response.assets?response.assets[0].type:'';
                   var name = response.assets?response.assets[0].fileName:'';
-                  setPicture({uri,type,name});
+                  setPicture({'uri': uri,'type': type, 'name': name});
                   console.log(uri);
 
                   
@@ -169,11 +180,11 @@ const newIssue =({route, navigation}) =>{
                 mediaType: 'photo',
                 maxWidth: 300,
                 maxHeight: 550,
-                quality: 1,
+                quality: 0.99,
               };
               launchImageLibrary(options, (response) => {
                 console.log('Response = ', response);
-                console.log('Response =', response.assets?response.assets[0].uri:'');
+                console.log('Response =', response.assets?response.assets[0].fileSize:'');
           
                 if (response.didCancel) {
                   alert('User cancelled camera picker');
@@ -191,7 +202,7 @@ const newIssue =({route, navigation}) =>{
                 var uri = response.assets?response.assets[0].uri:'';
                 var type = response.assets?response.assets[0].type:'';
                 var name = response.assets?response.assets[0].fileName:'';
-                setPicture({uri,type,name});
+                setPicture({'fileName': name, 'type': type, 'uri': uri});
                 
               });
         }
@@ -201,20 +212,40 @@ const newIssue =({route, navigation}) =>{
         }
 
     }
-    const _send_to_server=()=>{
+    const _send_to_server=async()=>{
         try
         {
-
+          let body = new FormData();
+          body.append('files',{'name': picture.fileName, 'type': picture.type,
+              'uri': picture.uri});
+          body.append('Content-Type', 'image/png');
+          const settings={
+            method: 'POST',
+            headers: {"Content-Type": "multipart/form-data"},
+            body: body
+          }
+          var res = await fetch(config.api_server+ '/api/HSE5S/PostFile', settings);
+          if(res.status !== 200)
+          {
+            setPicture_server_url('');
+          }
+          else if(res.status === 200)
+          {
+            setPicture_server_url(res.url);
+          }
+          
+          console.log(res);
         }
         catch(error)
         {
             alert(error);
+            console.log(error)
         }
     }
 
     const onSelectedItemsChange=(selectedDept)=>{
         setPick_dept(selectedDept);
-        console.log(pick_dept);
+        //console.log(pick_dept);
     }
 
 return(
@@ -256,7 +287,7 @@ return(
             </Picker>
 
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.loss:'hi'}</Text>
-            <Picker selectedValue={pick_classify}
+            <Picker selectedValue={pick_loss}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
                 onValueChange={(itemValue, itemIndex)=>{setPick_loss(itemValue)}}>
                 {loss?loss.map((item, key)=>{
@@ -316,14 +347,12 @@ return(
             />
             </View>
             <Button  style={styles.input_content} mode="contained" onPress={() => setModal(true)}>
-            {lang?ngonngu.stringLang[lang].new_issue.photo:'hi'}
+              {lang?ngonngu.stringLang[lang].new_issue.photo:'hi'}
             </Button>
             <Button  style={styles.input_content} mode="contained" onPress={NEW_ISSUE}>
-            {lang?ngonngu.stringLang[lang].new_issue.submit:'hi'}
+              {lang?ngonngu.stringLang[lang].new_issue.submit:'hi'}
             </Button>
           
-
-            
             <Modal
              animationType='slide'
              transparent={true}
