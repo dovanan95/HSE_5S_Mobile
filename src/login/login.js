@@ -69,6 +69,13 @@ const login=({route, navigation})=> {
         await AsyncStorage.setItem('permission', json_res);
         await AsyncStorage.setItem('id_user', user_id);
         await AsyncStorage.setItem('lang', language);
+        /*
+        var resud = lang.filter(function(item){
+          return item.lkey=='vn';
+        }).map(function({lkey, display}){
+          return {lkey, display}
+        });
+        console.log(resud);*/
 
         navigation.navigate("general_menu");
       }

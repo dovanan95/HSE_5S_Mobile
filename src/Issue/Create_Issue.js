@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
-    Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, TouchableOpacity } from "react-native";
+    Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, TouchableOpacity, SafeAreaView, FlatList } from "react-native";
 import {TextInput, Button} from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ngonngu from '../language/stringLanguage';
@@ -15,16 +15,21 @@ const newIssue =({route, navigation}) =>{
     const[content, setContent]=useState('');
 
     const[location, setLocation]=useState();
-    const[pick_location, setPick_location]=useState();
+    const[pick_location, setPick_location]=useState(1);
+
+    const[loc_desc, setLoc_desc]=useState();
+    const[locd_temp, setLocd_temp]=useState();
+    const[pick_locdes, setPick_locdes]=useState(1);
+    const[locdes_lock, setLocdes_lock]=useState(true);
 
     const[classify, setClassify]= useState();
-    const[pick_classify, setPick_classify]= useState();
+    const[pick_classify, setPick_classify]= useState(1);
 
     const[loss, setLoss]=useState();
-    const[pick_loss, setPick_loss]=useState();
+    const[pick_loss, setPick_loss]=useState(1);
 
     const[dept, setDept]=useState([]);
-    const[pick_dept, setPick_dept]= useState([]);
+    const[pick_dept, setPick_dept]= useState('1');
 
     const[date, setDate]=useState();
     const[today, setToday]=useState();
@@ -40,6 +45,16 @@ const newIssue =({route, navigation}) =>{
             var res_loc = await fetch(config.api_server+ '/api/HSE5S/GetLocation');
             var json_res_loc = await res_loc.json();
             setLocation(json_res_loc);
+
+            var res_locd = await fetch(config.api_server + '/api/HSE5S/GetLocationDesc');
+            var json_res_locd= await res_locd.json();
+            setLocd_temp(json_res_locd);
+            var locdescr = json_res_locd.filter(function(item){
+              return item.ID_Location == 1;
+            }).map(function({ID_LocationD, Name_LocationDetail}){
+              return {ID_LocationD, Name_LocationDetail}
+            });
+            setLoc_desc(locdescr);
 
             var res_los = await fetch(config.api_server+ '/api/HSE5S/GetLoss');
             var json_res_los = await res_los.json();
@@ -69,22 +84,22 @@ const newIssue =({route, navigation}) =>{
             setToday(homnay);
         }
         getItems();
+        
     },[])
 
     LogBox.ignoreAllLogs();
 
     const NEW_ISSUE = async()=>{
-      _send_to_server();
-      if(picture_server_url !== '')
+      const result = await _send_to_server();
+      if(result === 'OK')
       {
-        //do submit
-        console.log(picture_server_url);
+        console.log('server url: '+ picture_server_url);
+        console.log('dept pick: ' + pick_dept);
       }
-      else
+      else if(result === 'NG')
       {
         alert('Failed!!!');
-        console.log(picture_server_url);
-      }
+      } 
     }
 
     const requestCameraPermission = async () => {
@@ -131,7 +146,7 @@ const newIssue =({route, navigation}) =>{
                 mediaType: 'photo',
                 maxWidth: 300,
                 maxHeight: 550,
-                quality: 1,
+                quality: 0.99,
                 videoQuality: 'low',
                 durationLimit: 30, //Video max duration in seconds
                 saveToPhotos: true,
@@ -141,7 +156,7 @@ const newIssue =({route, navigation}) =>{
               if (isCameraPermitted && isStoragePermitted) {
                 launchCamera(options, (response) => {
                   console.log('Response = ', response);
-                  console.log('Response =', response.assets?response.assets[0].fileSize:'');
+                  console.log('Response =', response.assets?response.assets[0].fileName:'');
           
                   if (response.didCancel) {
                     alert('User cancelled camera picker');
@@ -159,9 +174,8 @@ const newIssue =({route, navigation}) =>{
                   var uri = response.assets?response.assets[0].uri:'';
                   var type = response.assets?response.assets[0].type:'';
                   var name = response.assets?response.assets[0].fileName:'';
-                  setPicture({'uri': uri,'type': type, 'name': name});
+                  setPicture({'uri': uri,'type': type, 'fileName': name});
                   console.log(uri);
-
                   
                 });
               }
@@ -184,7 +198,7 @@ const newIssue =({route, navigation}) =>{
               };
               launchImageLibrary(options, (response) => {
                 console.log('Response = ', response);
-                console.log('Response =', response.assets?response.assets[0].fileSize:'');
+                console.log('Response =', response.assets?response.assets[0].fileName:'');
           
                 if (response.didCancel) {
                   alert('User cancelled camera picker');
@@ -225,16 +239,16 @@ const newIssue =({route, navigation}) =>{
             body: body
           }
           var res = await fetch(config.api_server+ '/api/HSE5S/PostFile', settings);
+          var json_res= await res.text();
           if(res.status !== 200)
           {
-            setPicture_server_url('');
+            return('NG');
           }
           else if(res.status === 200)
           {
-            setPicture_server_url(res.url);
+            setPicture_server_url(json_res);
+            return('OK');
           }
-          
-          console.log(res);
         }
         catch(error)
         {
@@ -246,6 +260,15 @@ const newIssue =({route, navigation}) =>{
     const onSelectedItemsChange=(selectedDept)=>{
         setPick_dept(selectedDept);
         //console.log(pick_dept);
+    }
+
+    const onChangeLocation=async(input)=>{
+      var locdescr = locd_temp.filter(function(item){
+        return item.ID_Location == input;
+      }).map(function({ID_LocationD, Name_LocationDetail}){
+        return {ID_LocationD, Name_LocationDetail}
+      });
+      setLoc_desc(locdescr);
     }
 
 return(
@@ -271,10 +294,25 @@ return(
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.location:'hi'}</Text>
             <Picker selectedValue={pick_location}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
-                onValueChange={(itemValue, itemIndex)=>{setPick_location(itemValue)}}>
+                onValueChange={(itemValue, itemIndex)=>{
+                  setPick_location(itemValue);
+                  onChangeLocation(itemValue);
+                  setLocdes_lock(true);
+                 }}>
                 {location?location.map((item, key)=>{
                     return <Picker.Item label={item.Name_Location} value={item.ID_Location} key={key} />
                 }):<Picker.Item label='Location' value='loc_id'/>}
+                
+            </Picker>
+            <Text style={styles.input}>Location Description</Text>
+            <Picker selectedValue={pick_locdes}
+                style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
+                enabled={locdes_lock}
+                onValueChange={(itemValue, itemIndex)=>{
+                  setPick_locdes(itemValue)}}>
+                {loc_desc?loc_desc.map((item, key)=>{
+                    return <Picker.Item label={item.Name_LocationDetail} value={item.ID_LocationD} key={key} />
+                }):<Picker.Item label='Location Description' value='locd_id'/>}
                 
             </Picker>
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.classification:'hi'}</Text>
@@ -376,7 +414,6 @@ return(
                       {lang?ngonngu.stringLang[lang].new_issue.cancel:'hi'}
                     </Button>
                 </View>
-
             </Modal>
 
         </View>
