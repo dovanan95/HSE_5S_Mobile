@@ -155,8 +155,8 @@ const newIssue =({route, navigation}) =>{
               let isStoragePermitted = await requestExternalWritePermission();
               if (isCameraPermitted && isStoragePermitted) {
                 launchCamera(options, (response) => {
-                  console.log('Response = ', response);
-                  console.log('Response =', response.assets?response.assets[0].fileName:'');
+                  //console.log('Response = ', response);
+                  //console.log('Response =', response.assets?response.assets[0].fileName:'');
           
                   if (response.didCancel) {
                     alert('User cancelled camera picker');
@@ -197,8 +197,8 @@ const newIssue =({route, navigation}) =>{
                 quality: 0.99,
               };
               launchImageLibrary(options, (response) => {
-                console.log('Response = ', response);
-                console.log('Response =', response.assets?response.assets[0].fileName:'');
+                //console.log('Response = ', response);
+                //console.log('Response =', response.assets?response.assets[0].fileName:'');
           
                 if (response.didCancel) {
                   alert('User cancelled camera picker');
@@ -263,11 +263,20 @@ const newIssue =({route, navigation}) =>{
     }
 
     const onChangeLocation=async(input)=>{
-      var locdescr = locd_temp.filter(function(item){
+      /*var locdescr = locd_temp.filter(function(item){
         return item.ID_Location == input;
       }).map(function({ID_LocationD, Name_LocationDetail}){
         return {ID_LocationD, Name_LocationDetail}
       });
+      setLoc_desc(locdescr);*/
+      var locdescr = [];
+      for (var item in locd_temp)
+      {
+        if(locd_temp[item].ID_Location ==input)
+        {
+          locdescr.push(locd_temp[item]);
+        }
+      }
       setLoc_desc(locdescr);
     }
 
