@@ -284,7 +284,7 @@ return(
     <ScrollView>
         <View style={styles.container}>
             <TextInput
-                        label={lang?ngonngu.stringLang[lang].new_issue.name_issue:'hi'}
+                        label={lang?ngonngu.stringLang[lang].new_issue.name_issue:'loading...'}
                         style={styles.input}
                         value={name}
                         theme = {theme}
@@ -292,7 +292,7 @@ return(
                         onChangeText={text => setName( text )}
                     />
             <TextInput
-                        label={lang?ngonngu.stringLang[lang].new_issue.content:'hi'}
+                        label={lang?ngonngu.stringLang[lang].new_issue.content:'loading...'}
                         style={styles.input_content}
                         value={content}
                         theme = {theme}
@@ -300,7 +300,7 @@ return(
                         onChangeText={text => setContent( text )}
                     />
             
-            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.location:'hi'}</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.location:'loading...'}</Text>
             <Picker selectedValue={pick_location}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
                 onValueChange={(itemValue, itemIndex)=>{
@@ -324,7 +324,7 @@ return(
                 }):<Picker.Item label='Location Description' value='locd_id'/>}
                 
             </Picker>
-            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.classification:'hi'}</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.classification:'loading...'}</Text>
             <Picker selectedValue={pick_classify}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
                 onValueChange={(itemValue, itemIndex)=>{setPick_classify(itemValue)}}>
@@ -333,7 +333,7 @@ return(
                 }):<Picker.Item label='Class' value='clas_id'/>}
             </Picker>
 
-            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.loss:'hi'}</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.loss:'loading...'}</Text>
             <Picker selectedValue={pick_loss}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
                 onValueChange={(itemValue, itemIndex)=>{setPick_loss(itemValue)}}>
@@ -342,14 +342,14 @@ return(
                 }):<Picker.Item label='Loss' value='loss_id'/>}
             </Picker>
             
-            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.dept:'hi'}</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.dept:'loading...'}</Text>
             <MultiSelect
                 hideTags
                 items={dept?dept:[{'key':'value'}]}
                 uniqueKey="ID_Department"
                 onSelectedItemsChange={onSelectedItemsChange}
                 selectedItems={pick_dept}
-                selectText={lang?ngonngu.stringLang[lang].new_issue.pick_dept:'hi'}
+                selectText={lang?ngonngu.stringLang[lang].new_issue.pick_dept:'loading...'}
                 searchInputPlaceholderText="Search Dept..."
                 textInputProps={{autoFocus:false}}
                 onChangeInput={(text) => console.log(text)}
@@ -365,7 +365,7 @@ return(
                 submitButtonText="Submit"
             />
             <View style={{flexDirection:'row'}}>
-            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.deadline:'hi'}</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.deadline:'loading...'}</Text>
             <DatePicker
                 style={styles.datePickerStyle}
                 date={date} // Initial date from state
@@ -394,10 +394,10 @@ return(
             />
             </View>
             <Button  style={styles.input_content} mode="contained" onPress={() => setModal(true)}>
-              {lang?ngonngu.stringLang[lang].new_issue.photo:'hi'}
+              {lang?ngonngu.stringLang[lang].new_issue.photo:'loading...'}
             </Button>
             <Button  style={styles.input_content} mode="contained" onPress={NEW_ISSUE}>
-              {lang?ngonngu.stringLang[lang].new_issue.submit:'hi'}
+              {lang?ngonngu.stringLang[lang].new_issue.submit:'loading...'}
             </Button>
           
             <Modal
@@ -413,14 +413,14 @@ return(
                     />
                     <View style={styles.buttonModalView}>
                         <Button style={styles.input_content} mode="contained" onPress={() => _takePhoto()}>
-                        {lang?ngonngu.stringLang[lang].new_issue.camera:'hi'}
+                        {lang?ngonngu.stringLang[lang].new_issue.camera:'loading...'}
                         </Button>
                         <Button  style={styles.input_content} mode="contained" onPress={() => _uploadImage()}>
-                        {lang?ngonngu.stringLang[lang].new_issue.library:'hi'}
+                        {lang?ngonngu.stringLang[lang].new_issue.library:'loading...'}
                         </Button>
                     </View>
                     <Button style={styles.input_content} mode="contained" onPress={() => setModal(false)}>
-                      {lang?ngonngu.stringLang[lang].new_issue.cancel:'hi'}
+                      {lang?ngonngu.stringLang[lang].new_issue.cancel:'loading...'}
                     </Button>
                 </View>
             </Modal>

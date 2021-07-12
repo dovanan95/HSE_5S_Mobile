@@ -58,7 +58,7 @@ const login=({route, navigation})=> {
     {
       let res = await fetch(config.api_server+'/api/HSE5S/Login', settings);
       let json_res = await res.json();
-     
+      //console.log(JSON.parse(json_res)[0]['ID_Department']);
       if(json_res === "NG" || res.status !== 200)
       {
         alert("access denied!!");
@@ -69,13 +69,7 @@ const login=({route, navigation})=> {
         await AsyncStorage.setItem('permission', json_res);
         await AsyncStorage.setItem('id_user', user_id);
         await AsyncStorage.setItem('lang', language);
-        /*
-        var resud = lang.filter(function(item){
-          return item.lkey=='vn';
-        }).map(function({lkey, display}){
-          return {lkey, display}
-        });
-        console.log(resud);*/
+        await AsyncStorage.setItem('dept', String(JSON.parse(json_res)[0]['ID_Department']));
 
         navigation.navigate("general_menu");
       }
