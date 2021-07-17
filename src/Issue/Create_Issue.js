@@ -90,16 +90,61 @@ const newIssue =({route, navigation}) =>{
     LogBox.ignoreAllLogs();
 
     const NEW_ISSUE = async()=>{
-      const result = await _send_to_server();
-      if(result === 'OK')
+      try
       {
-        console.log('server url: '+ picture_server_url);
-        console.log('dept pick: ' + pick_dept);
+        const result = await _send_to_server();
+        if(result == 'OK')
+        {
+          var department=[];
+          for(var k in pick_dept)
+          {
+            department.push(parseInt(pick_dept[k]));
+          }
+          const id_user = await AsyncStorage.getItem('id_user');
+          const settings ={
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                {
+                  'Name_issue': name,
+                  'LocationD_ID': pick_locdes,
+                  'PIC': id_user,
+                  'Time_Start': today,
+                  'Deadline': date,
+                  'ID_Classify':pick_classify,
+                  'Picture': picture_server_url,
+                  'ID_Loss': pick_loss,
+                  'Content': content,
+                  'improvement': department
+                }
+              )
+          };
+          console.log(settings.body);
+          var response = await fetch(config.api_server+'/api/HSE5S/PostIssue', settings);
+          var json_response = response.status;
+          if(json_response==200)
+          {
+            alert('OK');
+          }
+          else
+          {
+            alert('Failed');
+            console.log(response);
+          }
+        }
+        else if(result == 'NG')
+        {
+          alert('Upload Image Failed!!!');
+        } 
       }
-      else if(result === 'NG')
+      catch(error)
       {
-        alert('Failed!!!');
-      } 
+        alert(error);
+      }
+     
     }
 
     const requestCameraPermission = async () => {
@@ -263,12 +308,6 @@ const newIssue =({route, navigation}) =>{
     }
 
     const onChangeLocation=async(input)=>{
-      /*var locdescr = locd_temp.filter(function(item){
-        return item.ID_Location == input;
-      }).map(function({ID_LocationD, Name_LocationDetail}){
-        return {ID_LocationD, Name_LocationDetail}
-      });
-      setLoc_desc(locdescr);*/
       var locdescr = [];
       for (var item in locd_temp)
       {
@@ -278,6 +317,12 @@ const newIssue =({route, navigation}) =>{
         }
       }
       setLoc_desc(locdescr);
+      /*var locdescr = locd_temp.filter(function(item){
+        return item.ID_Location == input;
+      }).map(function({ID_LocationD, Name_LocationDetail}){
+        return {ID_LocationD, Name_LocationDetail}
+      });
+      setLoc_desc(locdescr);*/
     }
 
 return(
