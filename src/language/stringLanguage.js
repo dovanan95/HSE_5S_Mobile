@@ -21,7 +21,8 @@ const stringLang =
             'camera': 'Máy Ảnh',
             'library': 'Thư Viện',
             'submit': 'Gửi',
-            'cancel': 'Hủy'
+            'cancel': 'Hủy',
+            'loc_desc':'Mô Tả Vị Trí'
         }
     },
     'en':
@@ -45,7 +46,8 @@ const stringLang =
             'camera': 'Camera',
             'library': 'Library',
             'submit': 'Send',
-            'cancel': 'Cancel'
+            'cancel': 'Cancel',
+            'loc_desc': 'Location Description'
         }
     },
     'kr':
@@ -69,7 +71,8 @@ const stringLang =
             'camera': '방',
             'library': '화랑',
             'submit': '제출하다',
-            'cancel': '취소하다'
+            'cancel': '취소하다',
+            'loc_desc':'위치 설명'
         }
     }
 }

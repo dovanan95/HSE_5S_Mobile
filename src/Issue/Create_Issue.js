@@ -122,7 +122,7 @@ const newIssue =({route, navigation}) =>{
                 }
               )
           };
-          console.log(settings.body);
+          //console.log(settings.body);
           var response = await fetch(config.api_server+'/api/HSE5S/PostIssue', settings);
           var json_response = response.status;
           if(json_response==200)
@@ -203,16 +203,23 @@ const newIssue =({route, navigation}) =>{
                   //console.log('Response = ', response);
                   //console.log('Response =', response.assets?response.assets[0].fileName:'');
           
-                  if (response.didCancel) {
+                  if (response.didCancel) 
+                  {
                     alert('User cancelled camera picker');
                     return;
-                  } else if (response.errorCode == 'camera_unavailable') {
+                  } 
+                  else if (response.errorCode == 'camera_unavailable') 
+                  {
                     alert('Camera not available on device');
                     return;
-                  } else if (response.errorCode == 'permission') {
+                  } 
+                  else if (response.errorCode == 'permission') 
+                  {
                     alert('Permission not satisfied');
                     return;
-                  } else if (response.errorCode == 'others') {
+                  } 
+                  else if (response.errorCode == 'others') 
+                  {
                     alert(response.errorMessage);
                     return;
                   }
@@ -245,16 +252,23 @@ const newIssue =({route, navigation}) =>{
                 //console.log('Response = ', response);
                 //console.log('Response =', response.assets?response.assets[0].fileName:'');
           
-                if (response.didCancel) {
+                if (response.didCancel) 
+                {
                   alert('User cancelled camera picker');
                   return;
-                } else if (response.errorCode == 'camera_unavailable') {
+                } 
+                else if (response.errorCode == 'camera_unavailable') 
+                {
                   alert('Camera not available on device');
                   return;
-                } else if (response.errorCode == 'permission') {
+                } 
+                else if (response.errorCode == 'permission') 
+                {
                   alert('Permission not satisfied');
                   return;
-                } else if (response.errorCode == 'others') {
+                } 
+                else if (response.errorCode == 'others') 
+                {
                   alert(response.errorMessage);
                   return;
                 }
@@ -358,7 +372,7 @@ return(
                 }):<Picker.Item label='Location' value='loc_id'/>}
                 
             </Picker>
-            <Text style={styles.input}>Location Description</Text>
+            <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.loc_desc:'loading...'}</Text>
             <Picker selectedValue={pick_locdes}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
                 enabled={locdes_lock}

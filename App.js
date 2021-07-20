@@ -15,6 +15,7 @@ import login from './src/login/login';
 import menu from './src/login/general_menu';
 
 import create_issue from './src/Issue/Create_Issue';
+import Trace_Issue from './src/Issue/Trace_Issue';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -44,6 +45,19 @@ function App() {
           component={create_issue}
           options={{
             title:'New Issue',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+          <Stack.Screen
+          name="issue_trace"
+          component={Trace_Issue}
+          options={{
+            title:'Issue History',
             headerStyle: {
               backgroundColor: '#FF1493', //Set Header color
             },
