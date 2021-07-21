@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image, 
     Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, 
-    TouchableOpacity, SafeAreaView, FlatList } from "react-native";
+    TouchableOpacity, SafeAreaView, FlatList, Animated } from "react-native";
 import {Card, ListItem, Button, Icon} from 'react-native-elements';
 import config from '../js_helper/configuration';
 import ngonngu from '../language/stringLanguage';
@@ -16,6 +16,7 @@ const TraceIssue = ({route, navigation})=>{
     const[issueList, setIssueList]=useState();
     const[issuecom, setIssuecom]=useState();
     const[modal, setModal]=useState(false);
+    const[modalcontrol, setModalControl]=useState(false);
 
     useEffect(()=>{
         async function initial()
@@ -101,36 +102,85 @@ const TraceIssue = ({route, navigation})=>{
         )
     }
 
-    return(
-        <ScrollView stickyHeaderIndices={[0]}> 
-            <View>
-                <Text>Most Recent</Text>
-                    <Picker
-                    selectedValue={selectedRecord}
-                    onValueChange={(itemValue, itemIndex)=>{
-                        onSelectNumRec(itemValue);
-                    }}>
-                    {numRec?numRec.map((item,key)=>{
-                        return(<Picker.Item label={item.keyNum.toString()} value={item.keyNum} key={key}/>)
-                    }):<Picker.Item label='Loading...' value='id'/>}</Picker>
-                </View>
-            <SafeAreaView>
-                <FlatList                    
-                    data={issueList}
-                    renderItem={ItemView}
-                    keyExtractor={(item, index)=> index.toString()}/>
-            </SafeAreaView>       
-            <Modal
-                animated='slide'
-                transparent={true}
-                visible={modal}
-                onRequestClose={()=>setModal(false)}>
-                <View style={styles.modalView}>
-                    <Text>{issuecom?issuecom.Name_LocationDetail:'loading...'}</Text>
-                </View>
+    let AnimatedHeaderValue = new Animated.Value(0);
+    const Header_Max_Height = 50;
+    const Header_Min_Height = 50;
 
-            </Modal>
-        </ScrollView>
+    const animatedHeaderBackgroundColor = AnimatedHeaderValue.interpolate(
+        {
+            inputRange:[0, Header_Max_Height-Header_Min_Height],
+            outputRange: ['white', 'pink'],
+            extrapolate: 'clamp'
+        }
+    );
+    const animatedHeaderHeight = AnimatedHeaderValue.interpolate(
+        {
+            inputRange:[0, Header_Max_Height-Header_Min_Height],
+            outputRange: [Header_Max_Height, Header_Min_Height],
+            extrapolate:'clamp'
+        }
+    )
+
+    return(
+        <SafeAreaView>
+            <Animated.View
+                style={[
+                    //styles.header,
+                    {
+                        height:animatedHeaderHeight,
+                        backgroundColor: animatedHeaderBackgroundColor
+                    }
+                ]}>
+                <TouchableOpacity style={styles.input_content} onPress={()=> setModalControl(true)}>
+                        <Text>Search Engine</Text> 
+                </TouchableOpacity>
+               
+                 
+           </Animated.View>
+            <ScrollView
+                scrollEventThrottle={16}
+                onScroll={Animated.event(
+                    [{nativeEvent:{contentOffset:{y:AnimatedHeaderValue}}}],
+                    {useNativeDriver:false}
+                )}> 
+         
+               <FlatList                    
+                   data={issueList}
+                   renderItem={ItemView}
+                   keyExtractor={(item, index)=> index.toString()}/>
+         
+           <Modal
+               animated='slide'
+               transparent={true}
+               visible={modal}
+               onRequestClose={()=>setModal(false)}>
+               <View style={styles.modalView}>
+                   <Text>{issuecom?issuecom.Name_LocationDetail:'loading...'}</Text>
+               </View>
+
+           </Modal>
+           <Modal
+               animated='slide'
+               transparent={true}
+               visible={modalcontrol}
+               onRequestClose={()=>setModalControl(false)}>
+               <View style={styles.modalControlView}>
+               <Text>Most Recent</Text>
+                   <Picker
+                   selectedValue={selectedRecord}
+                   onValueChange={(itemValue, itemIndex)=>{
+                       onSelectNumRec(itemValue);
+                       setModalControl(false);
+                   }}>
+                   {numRec?numRec.map((item,key)=>{
+                       return(<Picker.Item label={item.keyNum.toString()} value={item.keyNum} key={key}/>)
+                   }):<Picker.Item label='Loading...' value='id'/>}</Picker>
+               </View>
+
+           </Modal>
+       </ScrollView>
+        </SafeAreaView>
+        
     )
 }
 const styles = StyleSheet.create(
@@ -139,6 +189,12 @@ const styles = StyleSheet.create(
             flex: 1, 
             alignItems: 'center', 
             justifyContent: 'center',
+            backgroundColor: 'white',
+        },
+        modalControlView:{
+            flex: 1, 
+            //alignItems: 'center', 
+            //justifyContent: 'center',
             backgroundColor: 'white',
         },
         input_content:{
@@ -151,6 +207,12 @@ const styles = StyleSheet.create(
             padding:10,
             justifyContent:'space-around',
             backgroundColor:'white',
+        },
+        header:{
+            justifyContent:'center',
+            //alignItems: 'center',
+            //left:0,
+            //right:0
         }
     }
 )
