@@ -1,3 +1,4 @@
+import color from "color";
 import React, { useEffect, useState } from "react";
 import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image, 
     Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, 
@@ -175,6 +176,12 @@ const TraceIssue = ({route, navigation})=>{
                    {numRec?numRec.map((item,key)=>{
                        return(<Picker.Item label={item.keyNum.toString()} value={item.keyNum} key={key}/>)
                    }):<Picker.Item label='Loading...' value='id'/>}</Picker>
+                    <View style={styles.buttonModalView}>
+                    <TouchableOpacity style={styles.input} mode="contained" onPress={()=>{console.log('press')}}>
+                      <Text style={{color:'white'}}>SEARCH</Text> 
+                   </TouchableOpacity>
+                    </View>
+                   
                </View>
 
            </Modal>
@@ -201,6 +208,17 @@ const styles = StyleSheet.create(
             margin:5,
             marginTop:8,
             height:40
+        },
+        input:{
+            margin:6,
+            height:30,
+            color:'#FF1493',
+            backgroundColor: "blue",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 25,
+            width: "40%",
+
         },
         buttonModalView:{
             flexDirection:'row',
