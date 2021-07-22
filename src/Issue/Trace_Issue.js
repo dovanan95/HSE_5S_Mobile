@@ -43,13 +43,46 @@ const TraceIssue = ({route, navigation})=>{
     },[])
 
     const onDetail =({item})=>{
-        console.log(item.Picture);
+        //console.log(item.Picture);
         setModal(true);
         setIssuecom(item);
     }
-    const onImprove = async()=>{
+    const onImprove = async(value)=>{
         var dept = await AsyncStorage.getItem('dept');
+        const permitt = await AsyncStorage.getItem('permission');
+        const perm = JSON.parse(permitt);
         console.log(dept);
+
+        var res_dept = await fetch(config.api_server 
+            + '/api/HSE5S/getDeptImprove?ID_Issue='
+            + value.toString());
+        var res_dept_json = await res_dept.json();
+
+        var flag_dept = 0;
+        for(var k in res_dept_json)
+        {
+            if(dept==res_dept_json[k]['Team_Improve'])
+            {
+                flag_dept=1;
+            }
+        }
+
+        var flag_perm =0;
+        for(var k in perm)
+        {
+            if(perm[k]['Name_Function']=='Create_Improvement')
+            {
+                flag_perm=1;
+            }
+        }
+        if(flag_dept==1 && flag_perm==1)
+        {
+            console.log('OK');
+        }
+        else if(flag_dept==0 || flag_perm==0)
+        {
+            alert('You have no permission to improve this issue');
+        }
     }
     const onUpdate = async(value)=>{
         var ID_User = await AsyncStorage.getItem('id_user');
@@ -79,6 +112,10 @@ const TraceIssue = ({route, navigation})=>{
         
     }
 
+    const Search = async()=>{
+        console.log('search');
+    }
+
     const ItemView =({item}) =>{
         return(
             <View>
@@ -93,8 +130,16 @@ const TraceIssue = ({route, navigation})=>{
                         <TouchableOpacity style={styles.input_content} onPress={()=> onUpdate(item.PIC)}>
                             <Text>UPDATE</Text> 
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.input_content} onPress={()=> onImprove()}>
-                            <Text>IMPROVEMENT</Text> 
+                        <TouchableOpacity style={styles.input_content} onPress={()=> console.log('delete issue')}>
+                            <Text> DELETE ISSUE</Text> 
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonModalView}>
+                        <TouchableOpacity style={styles.input_content} onPress={()=> console.log('view improvement')}>
+                            <Text> VIEW IMPROVEMENT</Text> 
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.input_content} onPress={()=> onImprove(item.ID_Issue)}>
+                            <Text>IMPROVE</Text> 
                         </TouchableOpacity>
                     </View>
                     
@@ -156,6 +201,7 @@ const TraceIssue = ({route, navigation})=>{
                visible={modal}
                onRequestClose={()=>setModal(false)}>
                <View style={styles.modalView}>
+                    <Text>{issuecom?issuecom.ID_Issue:'loading...'}</Text>
                    <Text>{issuecom?issuecom.Name_LocationDetail:'loading...'}</Text>
                </View>
 
@@ -177,7 +223,10 @@ const TraceIssue = ({route, navigation})=>{
                        return(<Picker.Item label={item.keyNum.toString()} value={item.keyNum} key={key}/>)
                    }):<Picker.Item label='Loading...' value='id'/>}</Picker>
                     <View style={styles.buttonModalView}>
-                    <TouchableOpacity style={styles.input} mode="contained" onPress={()=>{console.log('press')}}>
+                    <TouchableOpacity style={styles.input}  
+                        onPress={()=>{
+                            Search();
+                            setModalControl(false);}}>
                       <Text style={{color:'white'}}>SEARCH</Text> 
                    </TouchableOpacity>
                     </View>

@@ -122,7 +122,6 @@ const newIssue =({route, navigation}) =>{
                 }
               )
           };
-          //console.log(settings.body);
           var response = await fetch(config.api_server+'/api/HSE5S/PostIssue', settings);
           var json_response = response.status;
           if(json_response==200)
