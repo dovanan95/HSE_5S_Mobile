@@ -127,21 +127,11 @@ const TraceIssue = ({route, navigation})=>{
                         <TouchableOpacity style={styles.input_content} onPress={()=> onDetail({item})}>
                             <Text>VIEW DETAIL</Text> 
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.input_content} onPress={()=> onUpdate(item.PIC)}>
-                            <Text>UPDATE</Text> 
-                        </TouchableOpacity>
                         <TouchableOpacity style={styles.input_content} onPress={()=> console.log('delete issue')}>
                             <Text> DELETE ISSUE</Text> 
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.buttonModalView}>
-                        <TouchableOpacity style={styles.input_content} onPress={()=> console.log('view improvement')}>
-                            <Text> VIEW IMPROVEMENT</Text> 
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.input_content} onPress={()=> onImprove(item.ID_Issue)}>
-                            <Text>IMPROVE</Text> 
-                        </TouchableOpacity>
-                    </View>
+                    
                     
                 </Card>
             </View>
@@ -200,10 +190,28 @@ const TraceIssue = ({route, navigation})=>{
                transparent={true}
                visible={modal}
                onRequestClose={()=>setModal(false)}>
-               <View style={styles.modalView}>
+               <ScrollView style={styles.modalView}>
                     <Text>{issuecom?issuecom.ID_Issue:'loading...'}</Text>
                    <Text>{issuecom?issuecom.Name_LocationDetail:'loading...'}</Text>
-               </View>
+                   <Text>{issuecom?issuecom.Name_Classify:'loading...'}</Text>
+                   <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
+                   <TouchableOpacity style={styles.input} onPress={()=> onUpdate(issuecom.PIC)}>
+                        <Text style={{color:'white'}}>UPDATE</Text> 
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.input} onPress={()=> onImprove(issuecom.ID_Issue)}>
+                        <Text style={{color:'white'}}>IMPROVE</Text> 
+                    </TouchableOpacity> 
+                   </View>
+                   <View style={{flexDirection:'row',alignItems:'center',justifyContent: "center",}}>
+                   <TouchableOpacity style={styles.input} onPress={()=> console.log('view improvement')}>
+                        <Text style={{color:'white'}}> VIEW IMPROVEMENT</Text> 
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.input} onPress={()=> setModal(false)}>
+                        <Text style={{color:'white'}}> EXIT</Text> 
+                    </TouchableOpacity>  
+                   </View>
+                                          
+               </ScrollView>
 
            </Modal>
            <Modal
@@ -243,8 +251,8 @@ const styles = StyleSheet.create(
     {
         modalView:{
             flex: 1, 
-            alignItems: 'center', 
-            justifyContent: 'center',
+            //alignItems: 'center', 
+            //justifyContent: 'center',
             backgroundColor: 'white',
         },
         modalControlView:{
@@ -259,7 +267,7 @@ const styles = StyleSheet.create(
             height:40
         },
         input:{
-            margin:6,
+            margin:4,
             height:30,
             color:'#FF1493',
             backgroundColor: "blue",
