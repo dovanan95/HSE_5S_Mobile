@@ -63,6 +63,10 @@ const TraceIssue = ({route, navigation})=>{
         {
             console.log('ok');
         }
+        else
+        {
+            alert('no permission!');
+        }
     }
 
     const onImprove = async(value)=>{
