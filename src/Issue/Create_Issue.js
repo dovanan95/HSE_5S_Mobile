@@ -42,36 +42,32 @@ const newIssue =({route, navigation}) =>{
     useEffect(()=>{
         async function getItems()
         {
-            var res_loc = await fetch(config.api_server+ '/api/HSE5S/GetLocation');
-            var json_res_loc = await res_loc.json();
-            setLocation(json_res_loc);
-
-            var res_locd = await fetch(config.api_server + '/api/HSE5S/GetLocationDesc');
-            var json_res_locd= await res_locd.json();
-            setLocd_temp(json_res_locd);
-            var locdescr = json_res_locd.filter(function(item){
-              return item.ID_Location == 1;
-            }).map(function({ID_LocationD, Name_LocationDetail}){
-              return {ID_LocationD, Name_LocationDetail}
-            });
-            setLoc_desc(locdescr);
-
-            var res_los = await fetch(config.api_server+ '/api/HSE5S/GetLoss');
-            var json_res_los = await res_los.json();
-            setLoss(json_res_los);
-
-            var res_clas = await fetch(config.api_server+ '/api/HSE5S/GetClassify');
-            var json_res_clas = await res_clas.json();
-            setClassify(json_res_clas);
-
-            var res_dept = await fetch(config.api_server+ '/api/HSE5S/GetDepartment');
-            var json_res_dept = await res_dept.json();
-            for(var k in json_res_dept)
+            var res_all = await fetch(config.api_server + '/api/HSE5S/GetAllElementIssue');
+            var json_res_all = await res_all.json();
+            
+            setLocation(json_res_all['Table2']);
+            
+            setLocd_temp(json_res_all['Table3']);
+            
+            var locdescr = [];
+            for(var k in json_res_all['Table3'])
             {
-                json_res_dept[k].ID_Department =String(json_res_dept[k].ID_Department) 
+              if(json_res_all['Table3'][k]['ID_Location']==1)
+              {
+                locdescr.push(json_res_all['Table3'][k])
+              }
             }
-
-            setDept(json_res_dept);
+            //console.log(locdescr);
+            setLoc_desc(locdescr);
+            
+            setLoss(json_res_all['Table5']);
+            setClassify(json_res_all['Table1']);
+            setDept(json_res_all['Table4']);
+            
+            for(var k in json_res_all['Table4'])
+            {
+              json_res_all['Table4'][k].ID_Department =String(json_res_all['Table4'][k].ID_Department) 
+            }
 
             const nn = await AsyncStorage.getItem('lang');
             setLang(nn);
