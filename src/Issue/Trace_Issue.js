@@ -215,6 +215,7 @@ const TraceIssue = ({route, navigation})=>{
                     <Text>{issuecom?issuecom.ID_Issue:'loading...'}</Text>
                    <Text>{issuecom?issuecom.Name_LocationDetail:'loading...'}</Text>
                    <Text>{issuecom?issuecom.Name_Classify:'loading...'}</Text>
+                   <Text>{issuecom?issuecom.Picture:'loading...'}</Text>
                    <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
                    <TouchableOpacity style={styles.input} onPress={()=> onUpdate(issuecom.PIC)}>
                         <Text style={{color:'white'}}>UPDATE</Text> 

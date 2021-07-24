@@ -93,7 +93,7 @@ const newIssue =({route, navigation}) =>{
       try
       {
         const result = await _send_to_server();
-        if(result == 'OK')
+        if(result != 'NG')
         {
           var department=[];
           for(var k in pick_dept)
@@ -115,7 +115,7 @@ const newIssue =({route, navigation}) =>{
                   'Time_Start': today,
                   'Deadline': date,
                   'ID_Classify':pick_classify,
-                  'Picture': picture_server_url,
+                  'Picture': result,
                   'ID_Loss': pick_loss,
                   'Content': content,
                   'improvement': department
@@ -305,7 +305,7 @@ const newIssue =({route, navigation}) =>{
           else if(res.status === 200)
           {
             setPicture_server_url(json_res);
-            return('OK');
+            return(json_res);
           }
         }
         catch(error)
