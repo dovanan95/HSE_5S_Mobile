@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
-    Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, TouchableOpacity, SafeAreaView, FlatList } from "react-native";
+    Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, 
+    ActivityIndicator, TouchableOpacity, SafeAreaView, FlatList } from "react-native";
 import {TextInput, Button} from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ngonngu from '../language/stringLanguage';
@@ -38,10 +39,13 @@ const newIssue =({route, navigation}) =>{
     const[picture_server_url, setPicture_server_url]=useState('');
 
     const[modal, setModal]=useState(false);
+    const[loading, setLoading]=useState(true);
 
     useEffect(()=>{
         async function getItems()
         {
+          try
+          {
             var res_all = await fetch(config.api_server + '/api/HSE5S/GetAllElementIssue');
             var json_res_all = await res_all.json();
             
@@ -57,16 +61,15 @@ const newIssue =({route, navigation}) =>{
                 locdescr.push(json_res_all['Table3'][k])
               }
             }
-            //console.log(locdescr);
             setLoc_desc(locdescr);
             
             setLoss(json_res_all['Table5']);
             setClassify(json_res_all['Table1']);
             setDept(json_res_all['Table4']);
             
-            for(var k in json_res_all['Table4'])
+            for(var key in json_res_all['Table4'])
             {
-              json_res_all['Table4'][k].ID_Department =String(json_res_all['Table4'][k].ID_Department) 
+              json_res_all['Table4'][key].ID_Department =String(json_res_all['Table4'][key].ID_Department) 
             }
 
             const nn = await AsyncStorage.getItem('lang');
@@ -78,6 +81,15 @@ const newIssue =({route, navigation}) =>{
             var yyyy=  homnay.getFullYear();
             homnay = yyyy+'-'+mm+'-'+dd;
             setToday(homnay);
+          }
+          catch(error)
+          {
+            alert(error);
+          }
+          finally
+          {
+            setLoading(false);
+          }
         }
         getItems();
         
@@ -335,7 +347,7 @@ const newIssue =({route, navigation}) =>{
     }
 
 return(
-    <ScrollView>
+    <ScrollView>{loading?<ActivityIndicator size="small" color="#0000ff"/>:(
         <View style={styles.container}>
             <TextInput
                         label={lang?ngonngu.stringLang[lang].new_issue.name_issue:'loading...'}
@@ -479,7 +491,7 @@ return(
                 </View>
             </Modal>
 
-        </View>
+        </View>)}
     </ScrollView>
     
 )}
