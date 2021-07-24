@@ -47,11 +47,28 @@ const TraceIssue = ({route, navigation})=>{
         setModal(true);
         setIssuecom(item);
     }
+
+    const onViewImp =async(value)=>{
+        const permitt = await AsyncStorage.getItem('permission');
+        const perm = JSON.parse(permitt);
+        var flag_perm =0;
+        for(var k in perm)
+        {
+            if(perm[k]['Name_Function']=='improvement_trace')
+            {
+                flag_perm=1;
+            }
+        }
+        if(flag_perm==1)
+        {
+            console.log('ok');
+        }
+    }
+
     const onImprove = async(value)=>{
         var dept = await AsyncStorage.getItem('dept');
         const permitt = await AsyncStorage.getItem('permission');
         const perm = JSON.parse(permitt);
-        console.log(dept);
 
         var res_dept = await fetch(config.api_server 
             + '/api/HSE5S/getDeptImprove?ID_Issue='
@@ -203,7 +220,7 @@ const TraceIssue = ({route, navigation})=>{
                     </TouchableOpacity> 
                    </View>
                    <View style={{flexDirection:'row',alignItems:'center',justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> console.log('view improvement')}>
+                   <TouchableOpacity style={styles.input} onPress={()=> onViewImp(issuecom.ID_Issue)}>
                         <Text style={{color:'white'}}> VIEW IMPROVEMENT</Text> 
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.input} onPress={()=> setModal(false)}>
