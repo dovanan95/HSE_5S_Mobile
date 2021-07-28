@@ -121,7 +121,7 @@ const newIssue =({route, navigation}) =>{
                   'LocationD_ID': pick_locdes,
                   'PIC': id_user,
                   'Time_Start': today,
-                  'Deadline': date,
+                  'Deadline': date + " 23:59:59",
                   'ID_Classify':pick_classify,
                   'Picture': result[1],
                   'ID_Loss': pick_loss,
