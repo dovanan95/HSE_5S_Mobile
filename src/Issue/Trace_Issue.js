@@ -1,7 +1,7 @@
 import color from "color";
 import React, { useEffect, useState } from "react";
 import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image, 
-    Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, 
+    Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, ActivityIndicator,
     TouchableOpacity, SafeAreaView, FlatList, Animated } from "react-native";
 import {Card, ListItem, Button, Icon} from 'react-native-elements';
 import config from '../js_helper/configuration';
@@ -13,6 +13,23 @@ const TraceIssue = ({route, navigation})=>{
     const[selectedRecord, setSelectedRec]=useState(5);
    
     const[lang, setLang]=useState('');
+    const[loading, setLoading] = useState(true);
+
+    //seletion search
+    const[classify, setClassify]=useState();
+    const[pick_classify, setPick_classify]= useState(1);
+    const[loss, setLoss]=useState();
+    const[pick_loss, setPick_loss]=useState(1);
+    //const[status, setStatus]= useState();
+    const[pick_status, setPick_Stt]=useState('Pending');
+
+    const[location, setLocation]=useState();
+    const[pick_location, setPick_location]=useState(1);
+
+    const[loc_desc, setLoc_desc]=useState();
+    const[locd_temp, setLocd_temp]=useState();
+    const[pick_locdes, setPick_locdes]=useState(1);
+    //end selection search
 
     const[issueList, setIssueList]=useState();
     const[issuecom, setIssuecom]=useState();
@@ -22,31 +39,76 @@ const TraceIssue = ({route, navigation})=>{
     useEffect(()=>{
         async function initial()
         {
-            var res = await fetch(config.api_server 
-                +'/api/HSE5S/TraceGeneralIssue?numberRecord='
-                +selectedRecord.toString());
-            var json_res = await res.json();
-            setIssueList(json_res);
-
-            var recQty =[];
-            for(var i=1;i<=20;i++)
+            try
             {
-                var obj = {'keyNum': i};
-                await recQty.push(obj);
-            }
-            await setNumRec(recQty);
+                var res = await fetch(config.api_server 
+                    +'/api/HSE5S/TraceGeneralIssue?numberRecord='
+                    +selectedRecord.toString());
+                var json_res = await res.json();
+                setIssueList(json_res);
     
-            const nn = await AsyncStorage.getItem('lang');
-            setLang(nn);
+                var recQty =[];
+                for(var i=1;i<=20;i++)
+                {
+                    var obj = {'keyNum': i};
+                    await recQty.push(obj);
+                }
+                await setNumRec(recQty);
+        
+                const nn = await AsyncStorage.getItem('lang');
+                setLang(nn);
+
+                var res_all = await fetch(config.api_server 
+                    + '/api/HSE5S/GetAllElementIssue');
+                var json_res_all = await res_all.json();
+
+                setLoss(json_res_all['Table5']);
+                setClassify(json_res_all['Table1']);
+
+                setLocation(json_res_all['Table2']);
+                setLocd_temp(json_res_all['Table3']);
+                var locdescr = [];
+                for(var k in json_res_all['Table3'])
+                {
+                if(json_res_all['Table3'][k]['ID_Location']==1)
+                {
+                    locdescr.push(json_res_all['Table3'][k])
+                }
+                }
+                setLoc_desc(locdescr);
+
+            }
+            catch(error)
+            {
+                alert(error);
+            }
+            finally
+            {
+                setLoading(false);
+            }
         }
         initial();
     },[])
+
+    const onChangeLocation=async(input)=>{
+        var locdescr = [];
+        for (var item in locd_temp)
+        {
+          if(locd_temp[item].ID_Location ==input)
+          {
+            locdescr.push(locd_temp[item]);
+          }
+        }
+        setLoc_desc(locdescr);
+    }
 
     const onDetail =({item})=>{
         //console.log(item.Picture);
         setModal(true);
         setIssuecom(item);
     }
+
+    const Issue_status = [{'reject': 'Reject'},{'pending': 'Pending'}, {'approved': 'Approved'}];
 
     const onViewImp =async(value)=>{
         const permitt = await AsyncStorage.getItem('permission');
@@ -89,9 +151,9 @@ const TraceIssue = ({route, navigation})=>{
         }
 
         var flag_perm =0;
-        for(var k in perm)
+        for(var kk in perm)
         {
-            if(perm[k]['Name_Function']=='Create_Improvement')
+            if(perm[kk]['Name_Function']=='Create_Improvement')
             {
                 flag_perm=1;
             }
@@ -149,7 +211,7 @@ const TraceIssue = ({route, navigation})=>{
                             <Text>VIEW DETAIL</Text> 
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.input_content} onPress={()=> console.log('delete issue')}>
-                            <Text> DELETE ISSUE</Text> 
+                            <Text> REJECT ISSUE</Text> 
                         </TouchableOpacity>
                     </View>
                     
@@ -194,7 +256,7 @@ const TraceIssue = ({route, navigation})=>{
                
                  
            </Animated.View>
-            <ScrollView
+           {loading?<ActivityIndicator size="small" color="#0000ff"/>:(<ScrollView
                 scrollEventThrottle={16}
                 onScroll={Animated.event(
                     [{nativeEvent:{contentOffset:{y:AnimatedHeaderValue}}}],
@@ -204,7 +266,7 @@ const TraceIssue = ({route, navigation})=>{
                <FlatList                    
                    data={issueList}
                    renderItem={ItemView}
-                   keyExtractor={(item, index)=> index.toString()}/>
+                   keyExtractor={(item, index)=> index.toString()}/>  
          
            <Modal
                animated='slide'
@@ -232,7 +294,7 @@ const TraceIssue = ({route, navigation})=>{
                         <Text style={{color:'white'}}> EXIT</Text> 
                     </TouchableOpacity>  
                    </View>
-                                          
+                                       
                </ScrollView>
 
            </Modal>
@@ -264,8 +326,8 @@ const TraceIssue = ({route, navigation})=>{
                </View>
 
            </Modal>
-       </ScrollView>
-        </SafeAreaView>
+       </ScrollView>)} 
+    </SafeAreaView>
         
     )
 }

@@ -21,6 +21,7 @@ const newIssue =({route, navigation}) =>{
     const[loc_desc, setLoc_desc]=useState();
     const[locd_temp, setLocd_temp]=useState();
     const[pick_locdes, setPick_locdes]=useState(1);
+    
     const[locdes_lock, setLocdes_lock]=useState(true);
 
     const[classify, setClassify]= useState();
@@ -69,7 +70,7 @@ const newIssue =({route, navigation}) =>{
             
             for(var key in json_res_all['Table4'])
             {
-              json_res_all['Table4'][key].ID_Department =String(json_res_all['Table4'][key].ID_Department) 
+              json_res_all['Table4'][key].ID_Department = String(json_res_all['Table4'][key].ID_Department) 
             }
 
             const nn = await AsyncStorage.getItem('lang');
