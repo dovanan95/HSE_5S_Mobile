@@ -29,6 +29,9 @@ const TraceIssue = ({route, navigation})=>{
     const[loc_desc, setLoc_desc]=useState();
     const[locd_temp, setLocd_temp]=useState();
     const[pick_locdes, setPick_locdes]=useState(1);
+
+    const[start_date, setStartDate]=useState('2021-01-01');
+    const[until_date, setUntilDate]=useState();
     //end selection search
 
     const[issueList, setIssueList]=useState();
@@ -58,22 +61,29 @@ const TraceIssue = ({route, navigation})=>{
                 const nn = await AsyncStorage.getItem('lang');
                 setLang(nn);
 
+                var homnay = new Date();
+                var dd= String(homnay.getDate()).padStart(2, '0');
+                var mm = String(homnay.getMonth()+1).padStart(2, '0');
+                var yyyy=  homnay.getFullYear();
+                homnay = yyyy+'-'+mm+'-'+dd;
+                setUntilDate(homnay);
+
                 var res_all = await fetch(config.api_server 
                     + '/api/HSE5S/GetAllElementIssue');
                 var json_res_all = await res_all.json();
 
                 setLoss(json_res_all['Table5']);
                 setClassify(json_res_all['Table1']);
-
                 setLocation(json_res_all['Table2']);
                 setLocd_temp(json_res_all['Table3']);
+
                 var locdescr = [];
                 for(var k in json_res_all['Table3'])
                 {
                 if(json_res_all['Table3'][k]['ID_Location']==1)
-                {
-                    locdescr.push(json_res_all['Table3'][k])
-                }
+                    {
+                        locdescr.push(json_res_all['Table3'][k])
+                    }
                 }
                 setLoc_desc(locdescr);
 
