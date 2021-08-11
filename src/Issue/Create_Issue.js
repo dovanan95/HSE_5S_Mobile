@@ -514,7 +514,7 @@ const styles = StyleSheet.create({
     },
     datePickerStyle: {
         width: 200,
-        marginTop: 5,
+        marginTop: 0,
     },
     input_content:{
         margin:5,

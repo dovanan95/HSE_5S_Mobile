@@ -4,6 +4,7 @@ import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
     Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, ActivityIndicator,
     TouchableOpacity, SafeAreaView, FlatList, Animated } from "react-native";
 import {Card, ListItem, Button, Icon} from 'react-native-elements';
+import DatePicker from 'react-native-datepicker';
 import config from '../js_helper/configuration';
 import ngonngu from '../language/stringLanguage';
 
@@ -118,7 +119,7 @@ const TraceIssue = ({route, navigation})=>{
         setIssuecom(item);
     }
 
-    const Issue_status = [{'reject': 'Reject'},{'pending': 'Pending'}, {'approved': 'Approved'}];
+    const Issue_status = [{'status_key': 'Reject'},{'status_key': 'Pending'}, {'status_key': 'Approved'}];
 
     const onViewImp =async(value)=>{
         const permitt = await AsyncStorage.getItem('permission');
@@ -314,7 +315,7 @@ const TraceIssue = ({route, navigation})=>{
                visible={modalcontrol}
                onRequestClose={()=>setModalControl(false)}>
                <View style={styles.modalControlView}>
-               <Text>Most Recent</Text>
+                    <Text>Most Recent</Text>
                    <Picker
                    selectedValue={selectedRecord}
                    onValueChange={(itemValue, itemIndex)=>{
@@ -324,13 +325,29 @@ const TraceIssue = ({route, navigation})=>{
                    {numRec?numRec.map((item,key)=>{
                        return(<Picker.Item label={item.keyNum.toString()} value={item.keyNum} key={key}/>)
                    }):<Picker.Item label='Loading...' value='id'/>}</Picker>
+                    <Text>Location</Text>
+
+                    <Text>Location Description</Text>
+
+                    <Text>Classification</Text>
+
+                    <Text>Level</Text>
+
+                    <Text>Status</Text>
+                    <View style={{flexDirection:'row'}}>
+                        <Text>Start Date</Text>
+
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                        <Text>Until Date</Text>
+                    </View>
                     <View style={styles.buttonModalView}>
-                    <TouchableOpacity style={styles.input}  
-                        onPress={()=>{
-                            Search();
-                            setModalControl(false);}}>
-                      <Text style={{color:'white'}}>SEARCH</Text> 
-                   </TouchableOpacity>
+                        <TouchableOpacity style={styles.input}  
+                            onPress={()=>{
+                                Search();
+                                setModalControl(false);}}>
+                            <Text style={{color:'white'}}>SEARCH</Text> 
+                        </TouchableOpacity>
                     </View>
                    
                </View>
@@ -370,6 +387,10 @@ const styles = StyleSheet.create(
             borderRadius: 25,
             width: "40%",
 
+        },
+        datePickerStyle: {
+            width: 200,
+            marginTop: 0,
         },
         buttonModalView:{
             flexDirection:'row',
