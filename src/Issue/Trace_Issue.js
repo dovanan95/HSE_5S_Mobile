@@ -31,7 +31,7 @@ const TraceIssue = ({route, navigation})=>{
     const[locd_temp, setLocd_temp]=useState();
     const[pick_locdes, setPick_locdes]=useState(1);
 
-    const[start_date, setStartDate]=useState('2021-01-01');
+    const[start_date, setStartDate]=useState();
     const[until_date, setUntilDate]=useState();
     //end selection search
 
@@ -68,6 +68,7 @@ const TraceIssue = ({route, navigation})=>{
                 var yyyy=  homnay.getFullYear();
                 homnay = yyyy+'-'+mm+'-'+dd;
                 setUntilDate(homnay);
+                setStartDate(homnay);
 
                 var res_all = await fetch(config.api_server 
                     + '/api/HSE5S/GetAllElementIssue');
