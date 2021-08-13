@@ -7,6 +7,7 @@ import {Card, ListItem, Button, Icon} from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import config from '../js_helper/configuration';
 import ngonngu from '../language/stringLanguage';
+import { TextInput } from "react-native-paper";
 
 const TraceIssue = ({route, navigation})=>{
 
@@ -39,6 +40,10 @@ const TraceIssue = ({route, navigation})=>{
     const[issuecom, setIssuecom]=useState();
     const[modal, setModal]=useState(false);
     const[modalcontrol, setModalControl]=useState(false);
+
+    const[text_search, setTextSearch]=useState();
+    const[isLocal, setIsLocal]=useState(false);
+    const[issueList_local, setIssue_filter]=useState();
 
     useEffect(()=>{
         async function initial()
@@ -207,6 +212,24 @@ const TraceIssue = ({route, navigation})=>{
         
     }
 
+    const Search_Local=(value)=>{
+        console.log(value);
+        var localsearch=[];
+        for(var a in issueList)
+        {
+            if(String(issueList[a].Name_Issue).includes(value))
+            {
+                localsearch.push(issueList[a]);
+            }
+        }
+        setIssue_filter(localsearch);
+
+        if(value=='')
+        {
+            setIsLocal(false);
+        }
+    }
+
     const Search = async()=>{
         console.log('search');
     }
@@ -265,9 +288,14 @@ const TraceIssue = ({route, navigation})=>{
                 <TouchableOpacity style={styles.input_content} onPress={()=> setModalControl(true)}>
                         <Text>Search Engine</Text> 
                 </TouchableOpacity>
-               
-                 
+                                
            </Animated.View>
+           <TextInput placeholder='Search...' 
+           onChangeText={(text)=>{setTextSearch(text);
+            setIsLocal(true);
+            Search_Local(text);}}
+           value={text_search}></TextInput>
+
            {loading?<ActivityIndicator size="small" color="#0000ff"/>:(<ScrollView
                 scrollEventThrottle={16}
                 onScroll={Animated.event(
@@ -276,7 +304,7 @@ const TraceIssue = ({route, navigation})=>{
                 )}> 
          
                <FlatList                    
-                   data={issueList}
+                   data={isLocal?issueList_local:issueList}
                    renderItem={ItemView}
                    keyExtractor={(item, index)=> index.toString()}/>  
          
