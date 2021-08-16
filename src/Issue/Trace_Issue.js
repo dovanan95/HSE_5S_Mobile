@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image, 
     Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, ActivityIndicator,
     TouchableOpacity, SafeAreaView, FlatList, Animated } from "react-native";
-import {Card, ListItem, Button, Icon} from 'react-native-elements';
+import {Card, ListItem, Button, Icon, Input} from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import config from '../js_helper/configuration';
 import ngonngu from '../language/stringLanguage';
@@ -44,6 +44,8 @@ const TraceIssue = ({route, navigation})=>{
     const[text_search, setTextSearch]=useState();
     const[isLocal, setIsLocal]=useState(false);
     const[issueList_local, setIssue_filter]=useState();
+
+    const[searchGloble, setSearchGlobal]= useState();
 
     useEffect(()=>{
         async function initial()
@@ -213,7 +215,7 @@ const TraceIssue = ({route, navigation})=>{
     }
 
     const Search_Local=(value)=>{
-        console.log(value);
+        //console.log(value);
         var localsearch=[];
         for(var a in issueList)
         {
@@ -290,23 +292,27 @@ const TraceIssue = ({route, navigation})=>{
                 </TouchableOpacity>
                                 
            </Animated.View>
-           <TextInput placeholder='Search...' 
+           <Input placeholder='Search...' 
            onChangeText={(text)=>{setTextSearch(text);
             setIsLocal(true);
             Search_Local(text);}}
-           value={text_search}></TextInput>
+           value={text_search}></Input>
 
            {loading?<ActivityIndicator size="small" color="#0000ff"/>:(<ScrollView
+                contentContainerStyle={{paddingBottom: 150}}
                 scrollEventThrottle={16}
                 onScroll={Animated.event(
                     [{nativeEvent:{contentOffset:{y:AnimatedHeaderValue}}}],
-                    {useNativeDriver:false}
+                    {useNativeDriver:false},
                 )}> 
-         
-               <FlatList                    
+                <View>
+                <FlatList                    
                    data={isLocal?issueList_local:issueList}
                    renderItem={ItemView}
                    keyExtractor={(item, index)=> index.toString()}/>  
+                </View>
+         
+               
          
            <Modal
                animated='slide'
@@ -315,9 +321,11 @@ const TraceIssue = ({route, navigation})=>{
                onRequestClose={()=>setModal(false)}>
                <ScrollView style={styles.modalView}>
                     <Text>{issuecom?issuecom.ID_Issue:'loading...'}</Text>
-                   <Text>{issuecom?issuecom.Name_LocationDetail:'loading...'}</Text>
+                   <Text>{issuecom?'Location: '+ issuecom.Name_LocationDetail:'loading...'}</Text>
                    <Text>{issuecom?issuecom.Name_Classify:'loading...'}</Text>
                    <Text>{issuecom?issuecom.Picture:'loading...'}</Text>
+                   {issuecom?<Image style={styles.image} source={{uri: 'http://' + issuecom.Picture}}/>:<Text>Loading...</Text>} 
+                    
                    <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
                    <TouchableOpacity style={styles.input} onPress={()=> onUpdate(issuecom.PIC)}>
                         <Text style={{color:'white'}}>UPDATE</Text> 
@@ -343,7 +351,7 @@ const TraceIssue = ({route, navigation})=>{
                transparent={true}
                visible={modalcontrol}
                onRequestClose={()=>setModalControl(false)}>
-               <View style={styles.modalControlView}>
+               <ScrollView style={styles.modalControlView}>
                     <Text>Most Recent</Text>
                    <Picker
                    selectedValue={selectedRecord}
@@ -354,6 +362,24 @@ const TraceIssue = ({route, navigation})=>{
                    {numRec?numRec.map((item,key)=>{
                        return(<Picker.Item label={item.keyNum.toString()} value={item.keyNum} key={key}/>)
                    }):<Picker.Item label='Loading...' value='id'/>}</Picker>
+                   <View style={{flexDirection:'row'}}>
+                       <View>
+                            <TextInput style={styles.text_input} placeholder='Search' 
+                            value={searchGloble} 
+                            onChangeText={setSearchGlobal}></TextInput>
+                       </View>
+                       <View>
+                            <TouchableOpacity 
+                            style={{padding:12,
+                            justifyContent:'center',
+                           
+                            backgroundColor: "blue",
+                            }}  
+                            onPress={()=>console.log(searchGloble)}>
+                                    <Text style={{ color:'white',}}>Search Name</Text>
+                            </TouchableOpacity>
+                       </View>
+                   </View>
                     <Text>Location</Text>
 
                     <Text>Location Description</Text>
@@ -379,7 +405,7 @@ const TraceIssue = ({route, navigation})=>{
                         </TouchableOpacity>
                     </View>
                    
-               </View>
+               </ScrollView>
 
            </Modal>
        </ScrollView>)} 
@@ -432,7 +458,20 @@ const styles = StyleSheet.create(
             //alignItems: 'center',
             //left:0,
             //right:0
-        }
+        },
+        text_input: {
+            height: 30,
+            width:250,
+            margin: 2,
+            borderWidth: 0.5,
+            padding: 5,
+        },
+        image: {
+            marginBottom: 40,
+            width: 300,
+            height: 300,
+            marginLeft:30
+        },
     }
 )
 
