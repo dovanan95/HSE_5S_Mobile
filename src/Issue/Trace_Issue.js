@@ -19,18 +19,18 @@ const TraceIssue = ({route, navigation})=>{
 
     //seletion search
     const[classify, setClassify]=useState();
-    const[pick_classify, setPick_classify]= useState(1);
+    const[pick_classify, setPick_classify]= useState(0);
     const[loss, setLoss]=useState();
-    const[pick_loss, setPick_loss]=useState(1);
+    const[pick_loss, setPick_loss]=useState(0);
     //const[status, setStatus]= useState();
-    const[pick_status, setPick_Stt]=useState('Pending');
+    const[pick_status, setPick_Stt]=useState('none');
 
     const[location, setLocation]=useState();
     const[pick_location, setPick_location]=useState(1);
 
     const[loc_desc, setLoc_desc]=useState();
     const[locd_temp, setLocd_temp]=useState();
-    const[pick_locdes, setPick_locdes]=useState(1);
+    const[pick_locdes, setPick_locdes]=useState(0);
 
     const[start_date, setStartDate]=useState();
     const[until_date, setUntilDate]=useState();
@@ -232,8 +232,59 @@ const TraceIssue = ({route, navigation})=>{
         }
     }
 
+    const Search_Name_Api=()=>{
+        try
+        {
+            setLoading(true);
+            console.log(searchGloble);
+            setModalControl(false);
+        }
+        catch(error)
+        {
+            alert(error);
+        }
+        finally
+        {
+            setLoading(false);
+        }
+        
+    }
+
     const Search = async()=>{
-        console.log('search');
+        try
+        {
+            setLoading(true);
+            const settings ={
+               method:'POST',
+               headers:{
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+               },
+               body:JSON.stringify(
+                   {
+                    "ID_Classify":pick_classify,
+                    "ID_Loss":pick_loss,
+                    "Time_Start":start_date,
+                    "Time_Until":until_date,
+                    "Status":pick_status,
+                    "LocationD_ID":pick_locdes
+                   }
+               )
+           };
+           var response = await fetch(config.api_server +'/api/HSE5S/SearchIssue', settings);
+           var json_response = await response.json();
+           setIssueList(JSON.parse(json_response));
+            
+        }
+        catch(error)
+        {
+            alert(error);
+        }
+        finally
+        {
+            setLoading(false);
+        }
+        
     }
 
     const ItemView =({item}) =>{
@@ -306,10 +357,10 @@ const TraceIssue = ({route, navigation})=>{
                     {useNativeDriver:false},
                 )}> 
                 <View>
-                <FlatList                    
-                   data={isLocal?issueList_local:issueList}
-                   renderItem={ItemView}
-                   keyExtractor={(item, index)=> index.toString()}/>  
+                    <FlatList                    
+                    data={isLocal?issueList_local:issueList}
+                    renderItem={ItemView}
+                    keyExtractor={(item, index)=> index.toString()}/>  
                 </View>
          
                
@@ -371,30 +422,123 @@ const TraceIssue = ({route, navigation})=>{
                        <View>
                             <TouchableOpacity 
                             style={{padding:12,
-                            justifyContent:'center',
-                           
+                            justifyContent:'center',    
                             backgroundColor: "blue",
                             }}  
-                            onPress={()=>console.log(searchGloble)}>
+                            onPress={()=>Search_Name_Api()}>
                                     <Text style={{ color:'white',}}>Search Name</Text>
                             </TouchableOpacity>
                        </View>
                    </View>
                     <Text>Location</Text>
-
+                        <Picker selectedValue={pick_location}
+                            style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
+                            onValueChange={(itemValue, itemIndex)=>{
+                            setPick_location(itemValue);
+                            onChangeLocation(itemValue);
+                            }}>
+                            {location?location.map((item, key)=>{
+                                return <Picker.Item label={item.Name_Location} value={item.ID_Location} key={key} />
+                            }):<Picker.Item label='Location' value='loc_id'/>}
+                            
+                        </Picker>
                     <Text>Location Description</Text>
-
+                        <Picker selectedValue={pick_locdes}
+                            style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
+                            onValueChange={(itemValue, itemIndex)=>{
+                            setPick_locdes(itemValue)}}>
+                            {loc_desc?loc_desc.map((item, key)=>{
+                                return <Picker.Item label={item.Name_LocationDetail} value={item.ID_LocationD} key={key} />
+                            }):<Picker.Item label='Location Description' value='locd_id'/>}
+                            
+                        </Picker>
                     <Text>Classification</Text>
-
+                        <Picker selectedValue={pick_classify}
+                            style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
+                            onValueChange={(itemValue, itemIndex)=>{setPick_classify(itemValue)}}>
+                            {classify?classify.map((item, key)=>{
+                                return <Picker.Item label={item.Name_Classify} value={item.ID_Classify} key={key} />
+                            }):<Picker.Item label='Class' value='clas_id'/>}
+                        </Picker>
                     <Text>Level</Text>
-
+                        <Picker selectedValue={pick_loss}
+                            style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
+                            onValueChange={(itemValue, itemIndex)=>{setPick_loss(itemValue)}}>
+                            {loss?loss.map((item, key)=>{
+                                return <Picker.Item label={item.Name_Level} value={item.ID_Level} key={key} />
+                            }):<Picker.Item label='Loss' value='loss_id'/>}
+                        </Picker>
                     <Text>Status</Text>
+                            <Picker selectedValue={pick_status}
+                            style={{height: 30, width: "98%", alignSelf: 'stretch'}}
+                            onValueChange={(itemValue, itemIndex)=>{setPick_Stt(itemValue)}}>
+                                {Issue_status.map((item, key)=>{
+                                    return<Picker.Item label={item.status_key} value={item.status_key} key={key}/>
+                                })}
+                            </Picker>
                     <View style={{flexDirection:'row'}}>
                         <Text>Start Date</Text>
-
+                        <DatePicker
+                            style={styles.datePickerStyle}
+                            date={start_date} // Initial date from state
+                            mode="date" // The enum of date, datetime and time
+                            placeholder={start_date?start_date:'2020-01-01'}
+                            format="YYYY-MM-DD"
+                            minDate='2020-01-01'
+                            maxDate="2099-12-31"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                //display: 'none',
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 0,
+                                },
+                                dateInput: {
+                                marginLeft: 36,
+                                },
+                            }}
+                            onDateChange={(date) => {
+                                let timestamp_start = Date.parse(date);
+                                let timestamp_end = Date.parse(until_date);
+                                if(timestamp_start>timestamp_end)
+                                {
+                                    date=until_date;
+                                } 
+                                setStartDate(date);
+                            }}
+                        />
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <Text>Until Date</Text>
+                        <DatePicker
+                            style={styles.datePickerStyle}
+                            date={until_date} // Initial date from state
+                            mode="date" // The enum of date, datetime and time
+                            placeholder={until_date?until_date:'2020-01-01'}
+                            format="YYYY-MM-DD"
+                            minDate='2020-01-01'
+                            maxDate="2099-12-31"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                //display: 'none',
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 0,
+                                },
+                                dateInput: {
+                                marginLeft: 36,
+                                },
+                            }}
+                            onDateChange={(date) => {
+                                setUntilDate(date);
+                            }}
+                        />
                     </View>
                     <View style={styles.buttonModalView}>
                         <TouchableOpacity style={styles.input}  
