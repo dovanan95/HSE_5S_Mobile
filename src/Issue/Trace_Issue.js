@@ -122,7 +122,6 @@ const TraceIssue = ({route, navigation})=>{
     }
 
     const onDetail =({item})=>{
-        //console.log(item.Picture);
         setModal(true);
         setIssuecom(item);
     }
@@ -142,7 +141,8 @@ const TraceIssue = ({route, navigation})=>{
         }
         if(flag_perm==1)
         {
-            console.log('ok');
+            setModal(false);
+            navigation.navigate('improvement_trace_by_issue', {'ID': value})
         }
         else
         {
@@ -179,7 +179,8 @@ const TraceIssue = ({route, navigation})=>{
         }
         if(flag_dept==1 && flag_perm==1)
         {
-            console.log('OK');
+            setModal(false);
+            navigation.navigate('create_imp', {'ID':value})
         }
         else if(flag_dept==0 || flag_perm==0)
         {
@@ -190,7 +191,8 @@ const TraceIssue = ({route, navigation})=>{
         var ID_User = await AsyncStorage.getItem('id_user');
         if(ID_User==value)
         {
-            console.log('OK');
+            setModal(false);
+            navigation.navigate('issue_update',{'obj': issuecom});
         }
         else
         {

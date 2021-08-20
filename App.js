@@ -16,6 +16,11 @@ import menu from './src/login/general_menu';
 
 import create_issue from './src/Issue/Create_Issue';
 import Trace_Issue from './src/Issue/Trace_Issue';
+import Update_Issue from './src/Issue/Update_Issue';
+
+import Imp_Hist from './src/Improvement/Imp_Hist';
+import Trace_Imp from './src/Improvement/Trace_Imp';
+import Create_Imp from './src/Improvement/Create_Imp';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -58,6 +63,58 @@ function App() {
           component={Trace_Issue}
           options={{
             title:'Issue History',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+          <Stack.Screen
+          name="issue_update"
+          component={Update_Issue}
+          options={{
+            title:'Update Issue',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+          <Stack.Screen
+          name="improvement_trace"
+          component={Imp_Hist}
+          options={{
+            title:'Improvement History',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+          <Stack.Screen
+          name="improvement_trace_by_issue"
+          component={Trace_Imp}
+          options={{
+            title:'Improvement',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+          <Stack.Screen
+          name="create_imp"
+          component={Create_Imp}
+          options={{
+            title:'Improvement Creation',
             headerStyle: {
               backgroundColor: '#FF1493', //Set Header color
             },

@@ -3,12 +3,12 @@ import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
     Picker, AsyncStorage, LogBox, ActivityIndicator,
     TouchableOpacity, SafeAreaView, FlatList, Animated } from "react-native";
 
+const Improvement_History = ({route, navigation}) =>{
 
-const Improvement_Trace = ({route, navigation}) =>{
     return(
         <Text>Hi</Text>
     )
 
 }
 
-export default Improvement_Trace;
+export default Improvement_History;
