@@ -232,11 +232,16 @@ const TraceIssue = ({route, navigation})=>{
         }
     }
 
-    const Search_Name_Api=()=>{
+    const Search_Name_Api=async()=>{
         try
         {
             setLoading(true);
             console.log(searchGloble);
+            var response = await fetch(config.api_server 
+                + '/api/HSE5S/SearchIssueName?name='
+                + searchGloble);
+            var json_res = await response.json();
+            setIssueList(json_res);
             setModalControl(false);
         }
         catch(error)
