@@ -9,33 +9,56 @@ import {
   TouchableOpacity,
   AsyncStorage,
   Picker,
-  FlatList
+  FlatList, ActivityIndicator
 } from "react-native";
+import { concat } from "react-native-reanimated";
 import ngonngu from '../language/stringLanguage';
 
 const menu = ({route, navigation})=>
 {
     const[lang, setLang] = useState();
     const[permit, setPermit]=useState();
+
+    const[loading, setLoading]=useState(true);
     const [listItems, setListItems] = useState(Func_Data);
   
     useEffect(()=>{
       async function getLang()
       {
-        const lon = await AsyncStorage.getItem('lang');
-        const permitt = await AsyncStorage.getItem('permission');
-        const perm = JSON.parse(permitt);
-        setPermit(perm);
-        //const lonn = JSON.parse(lon);
-        setLang(lon);
+        try
+        {
+          const lon = await AsyncStorage.getItem('lang');
+          const permitt = await AsyncStorage.getItem('permission');
+          const perm = JSON.parse(permitt);
+          setPermit(perm);
+          setLang(lon);
+
+          for(var k in free_Func_Data)
+          {
+            Func_Data.push(free_Func_Data[k]);
+          }
+
+        }
+        catch(error)
+        {
+          alert(error);
+        }
+        finally
+        {
+          setLoading(false);
+        }
+        
       }
       getLang();
     },[])
-    
-    const Func_Data=[
+
+    var Func_Data=[
         {'id': 'Create_Issue', 'value': lang?ngonngu.stringLang[lang].menu.create_issue:'hi'},
         {'id': 'issue_trace', 'value': lang?ngonngu.stringLang[lang].menu.issue_trace:'hi'},
         {'id': 'improvement_trace', 'value': lang?ngonngu.stringLang[lang].menu.improve_trace:'hi'},
+    ]
+
+    var free_Func_Data =[
         {'id': 'my_issue', 'value':'My Issue'},
         {'id': 'my_improvement', 'value':'My Improvement'}
     ]
@@ -81,14 +104,23 @@ const menu = ({route, navigation})=>
         }
         else if(flag===0)
         {
-          if(item.id=='my_issue'||item.id=='my_improvement')
+          var flag_free = 0;
+          for(var i in free_Func_Data)
           {
-            navigation.navigate(item.id);
+            if(item.id == free_Func_Data[i].id)
+            {
+              flag_free=1;
+            }
+            if(flag_free==1)
+            {
+              navigation.navigate(item.id);
+              flag_free=0;
+            }
+            else
+            {
+              alert('no permission');
+            }
           }
-          else
-          {
-            alert('no permission');
-          } 
         }
       }
       catch(error)
@@ -101,7 +133,7 @@ const menu = ({route, navigation})=>
 
     return(
         <View>
-            <SafeAreaView>
+            {loading?<ActivityIndicator size="small" color="#0000ff"/>:<SafeAreaView>
             <FlatList
                 data={Func_Data}
                 //data defined in constructor
@@ -110,7 +142,7 @@ const menu = ({route, navigation})=>
                 renderItem={ItemView}
                 keyExtractor={(item, index) => index.toString()}
                 />
-            </SafeAreaView>
+            </SafeAreaView>}
         </View>
     )
 }
