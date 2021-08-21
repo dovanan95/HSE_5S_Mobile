@@ -35,7 +35,9 @@ const menu = ({route, navigation})=>
     const Func_Data=[
         {'id': 'Create_Issue', 'value': lang?ngonngu.stringLang[lang].menu.create_issue:'hi'},
         {'id': 'issue_trace', 'value': lang?ngonngu.stringLang[lang].menu.issue_trace:'hi'},
-        {'id': 'improvement_trace', 'value': lang?ngonngu.stringLang[lang].menu.improve_trace:'hi'}
+        {'id': 'improvement_trace', 'value': lang?ngonngu.stringLang[lang].menu.improve_trace:'hi'},
+        {'id': 'my_issue', 'value':'My Issue'},
+        {'id': 'my_improvement', 'value':'My Improvement'}
     ]
 
     const ItemView = ({ item }) => {
@@ -77,9 +79,16 @@ const menu = ({route, navigation})=>
             navigation.navigate(item.id);
             flag=0;
         }
-        else 
+        else if(flag===0)
         {
+          if(item.id=='my_issue'||item.id=='my_improvement')
+          {
+            navigation.navigate(item.id);
+          }
+          else
+          {
             alert('no permission');
+          } 
         }
       }
       catch(error)

@@ -17,10 +17,12 @@ import menu from './src/login/general_menu';
 import create_issue from './src/Issue/Create_Issue';
 import Trace_Issue from './src/Issue/Trace_Issue';
 import Update_Issue from './src/Issue/Update_Issue';
+import My_Issue from './src/Issue/My_Issue';
 
 import Imp_Hist from './src/Improvement/Imp_Hist';
 import Trace_Imp from './src/Improvement/Trace_Imp';
 import Create_Imp from './src/Improvement/Create_Imp';
+import My_Improvement from './src/Improvement/My_Imp';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -115,6 +117,32 @@ function App() {
           component={Create_Imp}
           options={{
             title:'Improvement Creation',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+          <Stack.Screen
+          name="my_improvement"
+          component={My_Improvement}
+          options={{
+            title:'My Improvement',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+          <Stack.Screen
+          name="my_issue"
+          component={My_Issue}
+          options={{
+            title:'My Issue',
             headerStyle: {
               backgroundColor: '#FF1493', //Set Header color
             },
