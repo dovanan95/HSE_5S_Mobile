@@ -409,7 +409,7 @@ const TraceIssue = ({route, navigation})=>{
                    <Text>{issuecom?issuecom.issue.Time_Start:'loading...'}</Text>
                    <Text>{issuecom?issuecom.issue.Deadline:'loading...'}</Text>
                    <FlatList
-                   data={issuecom?issuecom.improve_dept:{'key':'isloading...'}}
+                   data={issuecom?issuecom.improve_dept:{'Name_Department':'isloading...'}}
                    renderItem={Item_Issue_Dept_View}
                    keyExtractor={(item, index)=> index.toString()}
                    />
