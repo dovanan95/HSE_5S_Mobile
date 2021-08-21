@@ -173,11 +173,7 @@ const TraceIssue = ({route, navigation})=>{
         const permitt = await AsyncStorage.getItem('permission');
         const perm = JSON.parse(permitt);
 
-        var res_dept = await fetch(config.api_server 
-            + '/api/HSE5S/getDeptImprove?ID_Issue='
-            + value.toString());
-        var res_dept_json = await res_dept.json();
-
+        var res_dept_json = issuecom.improve_dept;
         var flag_dept = 0;
         for(var k in res_dept_json)
         {
