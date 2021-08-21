@@ -20,24 +20,20 @@ const menu = ({route, navigation})=>
     const[permit, setPermit]=useState();
 
     const[loading, setLoading]=useState(true);
-    const [listItems, setListItems] = useState(Func_Data);
+    const [listItems, setListItems] = useState();
   
     useEffect(()=>{
       async function getLang()
       {
         try
         {
+          
           const lon = await AsyncStorage.getItem('lang');
           const permitt = await AsyncStorage.getItem('permission');
           const perm = JSON.parse(permitt);
           setPermit(perm);
           setLang(lon);
-
-          for(var k in free_Func_Data)
-          {
-            Func_Data.push(free_Func_Data[k]);
-          }
-
+         
         }
         catch(error)
         {
@@ -47,21 +43,24 @@ const menu = ({route, navigation})=>
         {
           setLoading(false);
         }
-        
       }
       getLang();
     },[])
 
+
+
     var Func_Data=[
-        {'id': 'Create_Issue', 'value': lang?ngonngu.stringLang[lang].menu.create_issue:'hi'},
-        {'id': 'issue_trace', 'value': lang?ngonngu.stringLang[lang].menu.issue_trace:'hi'},
-        {'id': 'improvement_trace', 'value': lang?ngonngu.stringLang[lang].menu.improve_trace:'hi'},
-    ]
+      {'id': 'Create_Issue', 'value': lang?ngonngu.stringLang[lang].menu.create_issue:'loading...'},
+      {'id': 'issue_trace', 'value': lang?ngonngu.stringLang[lang].menu.issue_trace:'loading...'},
+      {'id': 'improvement_trace', 'value': lang?ngonngu.stringLang[lang].menu.improve_trace:'loading...'},
+      {'id': 'my_issue', 'value':lang?ngonngu.stringLang[lang].menu.my_issue:'loading...'},
+      {'id': 'my_improvement', 'value':lang?ngonngu.stringLang[lang].menu.my_improvement:'loading...'}
+    ];
 
     var free_Func_Data =[
-        {'id': 'my_issue', 'value':'My Issue'},
-        {'id': 'my_improvement', 'value':'My Improvement'}
-    ]
+        {'id': 'my_issue'},
+        {'id': 'my_improvement'}
+    ];
 
     const ItemView = ({ item }) => {
       return (
@@ -111,16 +110,16 @@ const menu = ({route, navigation})=>
             {
               flag_free=1;
             }
-            if(flag_free==1)
+          }
+          if(flag_free==1)
             {
               navigation.navigate(item.id);
               flag_free=0;
             }
-            else
+            else if(flag_free==0)
             {
               alert('no permission');
             }
-          }
         }
       }
       catch(error)

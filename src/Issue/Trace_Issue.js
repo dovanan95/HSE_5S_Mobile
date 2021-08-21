@@ -403,11 +403,14 @@ const TraceIssue = ({route, navigation})=>{
                onRequestClose={()=>setModal(false)}>
                <ScrollView style={styles.modalView}>
                 
+                   <Text>{issuecom?('Name: '+ issuecom.issue.Name_Issue):'loading...'}</Text>
+                   <Text>{issuecom?'Content: '+ issuecom.issue.Content:'loading...'}</Text>
                    <Text>{issuecom?'Location: '+ issuecom.issue.Name_LocationDetail:'loading...'}</Text>
-                   <Text>{issuecom?issuecom.issue.Name_Classify:'loading...'}</Text>
-                   <Text>{issuecom?issuecom.issue.Name_Level:'loading...'}</Text>
-                   <Text>{issuecom?issuecom.issue.Time_Start:'loading...'}</Text>
-                   <Text>{issuecom?issuecom.issue.Deadline:'loading...'}</Text>
+                   <Text>{issuecom?'Classification: '+issuecom.issue.Name_Classify:'loading...'}</Text>
+                   <Text>{issuecom?'Level: '+issuecom.issue.Name_Level:'loading...'}</Text>
+                   <Text>{issuecom?'Initial Date: '+issuecom.issue.Time_Start:'loading...'}</Text>
+                   <Text>{issuecom?'Deadlne: '+issuecom.issue.Deadline:'loading...'}</Text>
+                   <Text>Department for Improvement:</Text>
                    <FlatList
                    data={issuecom?issuecom.improve_dept:{'Name_Department':'isloading...'}}
                    renderItem={Item_Issue_Dept_View}

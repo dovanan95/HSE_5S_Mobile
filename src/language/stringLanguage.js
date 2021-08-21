@@ -6,7 +6,9 @@ const stringLang =
         'menu':{
             'create_issue': 'Tạo mới Issue',
             'issue_trace': 'Lịch sử Issue',
-            'improve_trace': 'Lịch sử Cải Tiến'
+            'improve_trace': 'Lịch sử Cải Tiến',
+            'my_issue': 'Issue của tôi',
+            'my_improvement':'Cải tiến của tôi'
         },
         'new_issue':{
             'name_issue': 'Tên Issue',
@@ -31,7 +33,9 @@ const stringLang =
         'menu':{
             'create_issue': 'New Issue',
             'issue_trace': 'Issue History',
-            'improve_trace': 'Improvement History'
+            'improve_trace': 'Improvement History',
+            'my_issue': 'My Issue',
+            'my_improvement':'My Improvement'
         },
         'new_issue':{
             'name_issue': 'Issue Name',
@@ -56,7 +60,9 @@ const stringLang =
         'menu':{
             'create_issue': '신간호',
             'issue_trace': '발행이력',
-            'improve_trace': '개선이력'
+            'improve_trace': '개선이력',
+            'my_issue': '나의 문제',
+            'my_improvement':'나의 발전'
         },
         'new_issue':{
             'name_issue': '이슈명',
