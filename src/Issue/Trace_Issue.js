@@ -75,7 +75,7 @@ const TraceIssue = ({route, navigation})=>{
                 var yyyy=  homnay.getFullYear();
                 homnay = yyyy+'-'+mm+'-'+dd;
                 setUntilDate(homnay);
-                setStartDate(homnay);
+                setStartDate('2021-01-01');
 
                 var res_all = await fetch(config.api_server 
                     + '/api/HSE5S/GetAllElementIssue');
@@ -121,9 +121,27 @@ const TraceIssue = ({route, navigation})=>{
         setLoc_desc(locdescr);
     }
 
-    const onDetail =({item})=>{
-        setModal(true);
-        setIssuecom(item);
+    const onDetail =async({item})=>{
+        try
+        {
+            setLoading(true);
+            var res_dept = await fetch(config.api_server 
+                + '/api/HSE5S/getDeptImprove?ID_Issue='
+                + item.ID_Issue.toString());
+            var res_dept_json = await res_dept.json();
+    
+            setModal(true);
+            setIssuecom({'issue': item, 'improve_dept': res_dept_json});
+        }
+        catch(error)
+        {
+            alert(error);
+        }
+        finally
+        {
+            setLoading(false);
+        }
+       
     }
 
     const Issue_status = [{'status_key': 'Reject'},{'status_key': 'Pending'}, {'status_key': 'Approved'}];
@@ -142,7 +160,7 @@ const TraceIssue = ({route, navigation})=>{
         if(flag_perm==1)
         {
             setModal(false);
-            navigation.navigate('improvement_trace_by_issue', {'ID': value})
+            navigation.navigate('improvement_trace_by_issue', {'ID': value});
         }
         else
         {
@@ -177,24 +195,24 @@ const TraceIssue = ({route, navigation})=>{
                 flag_perm=1;
             }
         }
-        if(flag_dept==1 && flag_perm==1)
+        if(flag_dept==1 && flag_perm==1 && issuecom.issue.Status =='Pending')
         {
             setModal(false);
             navigation.navigate('create_imp', {'ID':value})
         }
-        else if(flag_dept==0 || flag_perm==0)
+        else if(flag_dept==0 || flag_perm==0 || issuecom.issue.Status != 'Pending')
         {
             alert('You have no permission to improve this issue');
         }
     }
     const onUpdate = async(value)=>{
         var ID_User = await AsyncStorage.getItem('id_user');
-        if(ID_User==value)
+        if(ID_User==value && issuecom.issue.Status == 'Pending')
         {
             setModal(false);
             navigation.navigate('issue_update',{'obj': issuecom});
         }
-        else
+        else if(ID_User != value || issuecom.issue.Status != 'Pending')
         {
             alert('You have no permission to update');
         }
@@ -293,6 +311,13 @@ const TraceIssue = ({route, navigation})=>{
         }
         
     }
+    const Item_Issue_Dept_View = ({item})=>{
+        return(
+            <View>
+                <Text>{item.Name_Department}</Text>
+            </View>
+        )
+    }
 
     const ItemView =({item}) =>{
         return(
@@ -305,10 +330,13 @@ const TraceIssue = ({route, navigation})=>{
                         <TouchableOpacity style={styles.input_content} onPress={()=> onDetail({item})}>
                             <Text>VIEW DETAIL</Text> 
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.input_content} onPress={()=> console.log('delete issue')}>
+                        <TouchableOpacity style={styles.input_content} onPress={()=> console.log('reject issue')}>
                             <Text> REJECT ISSUE</Text> 
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity style={styles.input_content} onPress={()=> console.log('update history')}>
+                            <Text> UPDATE HISTORY</Text> 
+                        </TouchableOpacity>
                     
                     
                 </Card>
@@ -378,22 +406,30 @@ const TraceIssue = ({route, navigation})=>{
                visible={modal}
                onRequestClose={()=>setModal(false)}>
                <ScrollView style={styles.modalView}>
-                    <Text>{issuecom?issuecom.ID_Issue:'loading...'}</Text>
-                   <Text>{issuecom?'Location: '+ issuecom.Name_LocationDetail:'loading...'}</Text>
-                   <Text>{issuecom?issuecom.Name_Classify:'loading...'}</Text>
-                   <Text>{issuecom?issuecom.Picture:'loading...'}</Text>
-                   {issuecom?<Image style={styles.image} source={{uri: 'http://' + issuecom.Picture}}/>:<Text>Loading...</Text>} 
+                
+                   <Text>{issuecom?'Location: '+ issuecom.issue.Name_LocationDetail:'loading...'}</Text>
+                   <Text>{issuecom?issuecom.issue.Name_Classify:'loading...'}</Text>
+                   <Text>{issuecom?issuecom.issue.Name_Level:'loading...'}</Text>
+                   <Text>{issuecom?issuecom.issue.Time_Start:'loading...'}</Text>
+                   <Text>{issuecom?issuecom.issue.Deadline:'loading...'}</Text>
+                   <FlatList
+                   data={issuecom?issuecom.improve_dept:{'key':'isloading...'}}
+                   renderItem={Item_Issue_Dept_View}
+                   keyExtractor={(item, index)=> index.toString()}
+                   />
+
+                   {issuecom?<Image style={styles.image} source={{uri: 'http://' + issuecom.issue.Picture}}/>:<Text>Loading...</Text>} 
                     
                    <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> onUpdate(issuecom.PIC)}>
+                   <TouchableOpacity style={styles.input} onPress={()=> onUpdate(issuecom.issue.PIC)}>
                         <Text style={{color:'white'}}>UPDATE</Text> 
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.input} onPress={()=> onImprove(issuecom.ID_Issue)}>
+                    <TouchableOpacity style={styles.input} onPress={()=> onImprove(issuecom.issue.ID_Issue)}>
                         <Text style={{color:'white'}}>IMPROVE</Text> 
                     </TouchableOpacity> 
                    </View>
                    <View style={{flexDirection:'row',alignItems:'center',justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> onViewImp(issuecom.ID_Issue)}>
+                   <TouchableOpacity style={styles.input} onPress={()=> onViewImp(issuecom.issue.ID_Issue)}>
                         <Text style={{color:'white'}}> VIEW IMPROVEMENT</Text> 
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.input} onPress={()=> setModal(false)}>

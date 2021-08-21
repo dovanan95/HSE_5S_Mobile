@@ -6,7 +6,7 @@ import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
 const Update_Issue = ({route, navigation}) =>{
 
     return(
-        <Text>{route.params.obj.Content}</Text>
+        <Text>{route.params.obj.issue.Content}</Text>
     )
 
 }
