@@ -14,7 +14,7 @@ const TraceIssue = ({route, navigation})=>{
     const[numRec, setNumRec]=useState([]);
     const[selectedRecord, setSelectedRec]=useState(5);
    
-    const[lang, setLang]=useState('');
+    const[lang, setLang]=useState();
     const[loading, setLoading] = useState(true);
 
     //seletion search
@@ -130,8 +130,10 @@ const TraceIssue = ({route, navigation})=>{
                 + item.ID_Issue.toString());
             var res_dept_json = await res_dept.json();
     
-            setModal(true);
+            //setModal(true);
             setIssuecom({'issue': item, 'improve_dept': res_dept_json});
+            var obj={'issue': item, 'improve_dept': res_dept_json}
+            navigation.navigate('issue_detail',{'obj': obj});
         }
         catch(error)
         {
@@ -315,6 +317,46 @@ const TraceIssue = ({route, navigation})=>{
         )
     }
 
+    const Detail_Issue = ()=> {
+        return(
+            <ScrollView style={styles.modalView}>
+                    <Text>{issuecom?('ID: '+ issuecom.issue.ID_Issue):'loading...'}</Text>
+                    <Text>{issuecom?('Name: '+ issuecom.issue.Name_Issue):'loading...'}</Text>
+                   <Text>{issuecom?'Content: '+ issuecom.issue.Content:'loading...'}</Text>
+                   <Text>{issuecom?'Location: '+ issuecom.issue.Name_LocationDetail:'loading...'}</Text>
+                   <Text>{issuecom?'Classification: '+issuecom.issue.Name_Classify:'loading...'}</Text>
+                   <Text>{issuecom?'Level: '+issuecom.issue.Name_Level:'loading...'}</Text>
+                   <Text>{issuecom?'Initial Date: '+issuecom.issue.Time_Start:'loading...'}</Text>
+                   <Text>{issuecom?'Deadlne: '+issuecom.issue.Deadline:'loading...'}</Text>
+                   <Text>Department for Improvement:</Text>
+                   <FlatList
+                   data={issuecom?issuecom.improve_dept:{'Name_Department':'isloading...'}}
+                   renderItem={Item_Issue_Dept_View}
+                   keyExtractor={(item, index)=> index.toString()}
+                   />
+
+                   {issuecom?<Image style={styles.image} source={{uri: 'http://' + issuecom.issue.Picture}}/>:<Text>Loading...</Text>} 
+                    
+                   <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
+                   <TouchableOpacity style={styles.input} onPress={()=> onUpdate(issuecom.issue.PIC)}>
+                        <Text style={{color:'white'}}>UPDATE</Text> 
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.input} onPress={()=> onImprove(issuecom.issue.ID_Issue)}>
+                        <Text style={{color:'white'}}>IMPROVE</Text> 
+                    </TouchableOpacity> 
+                   </View>
+                   <View style={{flexDirection:'row',alignItems:'center',justifyContent: "center",}}>
+                   <TouchableOpacity style={styles.input} onPress={()=> onViewImp(issuecom.issue.ID_Issue)}>
+                        <Text style={{color:'white'}}> VIEW IMPROVEMENT</Text> 
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.input} onPress={()=> setModal(false)}>
+                        <Text style={{color:'white'}}> EXIT</Text> 
+                    </TouchableOpacity>  
+                   </View>
+            </ScrollView>
+        )
+    }
+
     const ItemView =({item}) =>{
         return(
             <View>
@@ -401,42 +443,7 @@ const TraceIssue = ({route, navigation})=>{
                transparent={true}
                visible={modal}
                onRequestClose={()=>setModal(false)}>
-               <ScrollView style={styles.modalView}>
-                
-                   <Text>{issuecom?('Name: '+ issuecom.issue.Name_Issue):'loading...'}</Text>
-                   <Text>{issuecom?'Content: '+ issuecom.issue.Content:'loading...'}</Text>
-                   <Text>{issuecom?'Location: '+ issuecom.issue.Name_LocationDetail:'loading...'}</Text>
-                   <Text>{issuecom?'Classification: '+issuecom.issue.Name_Classify:'loading...'}</Text>
-                   <Text>{issuecom?'Level: '+issuecom.issue.Name_Level:'loading...'}</Text>
-                   <Text>{issuecom?'Initial Date: '+issuecom.issue.Time_Start:'loading...'}</Text>
-                   <Text>{issuecom?'Deadlne: '+issuecom.issue.Deadline:'loading...'}</Text>
-                   <Text>Department for Improvement:</Text>
-                   <FlatList
-                   data={issuecom?issuecom.improve_dept:{'Name_Department':'isloading...'}}
-                   renderItem={Item_Issue_Dept_View}
-                   keyExtractor={(item, index)=> index.toString()}
-                   />
-
-                   {issuecom?<Image style={styles.image} source={{uri: 'http://' + issuecom.issue.Picture}}/>:<Text>Loading...</Text>} 
-                    
-                   <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> onUpdate(issuecom.issue.PIC)}>
-                        <Text style={{color:'white'}}>UPDATE</Text> 
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.input} onPress={()=> onImprove(issuecom.issue.ID_Issue)}>
-                        <Text style={{color:'white'}}>IMPROVE</Text> 
-                    </TouchableOpacity> 
-                   </View>
-                   <View style={{flexDirection:'row',alignItems:'center',justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> onViewImp(issuecom.issue.ID_Issue)}>
-                        <Text style={{color:'white'}}> VIEW IMPROVEMENT</Text> 
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.input} onPress={()=> setModal(false)}>
-                        <Text style={{color:'white'}}> EXIT</Text> 
-                    </TouchableOpacity>  
-                   </View>
-                                       
-               </ScrollView>
+                   <Detail_Issue/>
 
            </Modal>
            <Modal

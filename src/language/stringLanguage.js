@@ -52,6 +52,16 @@ const stringLang =
             'submit': 'Send',
             'cancel': 'Cancel',
             'loc_desc': 'Location Description'
+        },
+        'trace_issue':{
+            'view_detail':'View Detail',
+            'reject_issue': 'Reject Issue',
+            'update_history': 'Update History',
+            'search_engine':'Search Engine',
+            'name_issue': 'Name Issue',
+            'content': ' Content',
+            'location': 'Location',
+            'classification': 'Classification'
         }
     },
     'kr':
@@ -79,6 +89,9 @@ const stringLang =
             'submit': '제출하다',
             'cancel': '취소하다',
             'loc_desc':'위치 설명'
+        },
+        'trace_issue':{
+
         }
     }
 }

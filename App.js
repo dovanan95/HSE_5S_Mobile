@@ -18,6 +18,7 @@ import create_issue from './src/Issue/Create_Issue';
 import Trace_Issue from './src/Issue/Trace_Issue';
 import Update_Issue from './src/Issue/Update_Issue';
 import My_Issue from './src/Issue/My_Issue';
+import Issue_Detail from './src/Issue/Issue_Detail';
 
 import Imp_Hist from './src/Improvement/Imp_Hist';
 import Trace_Imp from './src/Improvement/Trace_Imp';
@@ -143,6 +144,19 @@ function App() {
           component={My_Issue}
           options={{
             title:'My Issue',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+          <Stack.Screen
+          name="issue_detail"
+          component={Issue_Detail}
+          options={{
+            title:'Issue Detail',
             headerStyle: {
               backgroundColor: '#FF1493', //Set Header color
             },

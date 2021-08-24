@@ -1,0 +1,203 @@
+[33mcommit 62e044407057b9bf05825b31dd611ca5be0b33d1[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Aug 22 06:15:36 2021 +0900
+
+    matday
+
+[33mcommit 6b388dcf7426c51d343b221eed148a169c81446f[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Aug 22 05:14:55 2021 +0900
+
+    menu navigation improvement
+
+[33mcommit 160ca5a678f46cbccb65f813698b8eeec6537dc1[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Aug 22 04:39:10 2021 +0900
+
+    a
+
+[33mcommit bef6cbf3843a5d02fae41731b16307645c9d903f[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Aug 22 04:31:43 2021 +0900
+
+    menu navigation
+
+[33mcommit 7cd4a58a7c26471cbbe1b9cbad95837b4c31dbc9[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Aug 22 03:55:16 2021 +0900
+
+    reduce api call from onImprove
+
+[33mcommit bbb7ce5a6c3b11ff031aa79b3a9f696fdb0e0158[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Aug 22 03:43:46 2021 +0900
+
+    issuecom dept
+
+[33mcommit de14748ee95ec4091f6cccf8cfe19940d17a262a[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Fri Aug 20 22:29:03 2021 +0900
+
+    bulk update
+
+[33mcommit 6236b4ef8c2cfb18c938f5b52fcf3f410ea2ea3c[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Fri Aug 20 17:38:51 2021 +0900
+
+    search by name
+
+[33mcommit e5b80f3b9b986c04a274051ecad0f0f7a8b79b56[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Fri Aug 20 04:46:25 2021 +0900
+
+    Search Issue
+
+[33mcommit 7e4995d5b339b61bfd3a87eb9399c670bb0d2d4b[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Mon Aug 16 17:03:41 2021 +0900
+
+    UI
+
+[33mcommit 8ab6e14bcb89c0e2d66bc3c9c2d4bad2275b7e00[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sat Aug 14 05:31:14 2021 +0900
+
+    search issue loaded
+
+[33mcommit 278258fd52c10747c007271e7097081325b06340[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Thu Aug 12 02:42:21 2021 +0900
+
+    start date
+
+[33mcommit 62baedda0bd5ff6410a8f35ab808da35eb5bcff9[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Thu Aug 12 02:35:32 2021 +0900
+
+    issue status object
+
+[33mcommit ced4931ad464a67a7345463e98add7ad46f0016f[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Tue Aug 10 23:14:48 2021 +0900
+
+    next trace code
+
+[33mcommit fa5ba1c3a3127476bf49d757f99c2bb084b440b2[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Tue Aug 10 01:20:30 2021 +0900
+
+    trace issue function
+
+[33mcommit a5bd1c4756e98ff01029acdc3ab0aae2bba1085a[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Wed Jul 28 22:14:31 2021 +0900
+
+    time deadline
+
+[33mcommit 8f80bbd92e459e2c33d996c21f44a4f86d3db738[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Jul 25 05:01:30 2021 +0900
+
+    fix crash
+
+[33mcommit 51d012e293050ccfe829d65be47dbf8cac0ac100[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Jul 25 01:45:04 2021 +0900
+
+    api all in one issue
+
+[33mcommit 9040585d5bd452cdc8185087ca8a204208b63f68[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sat Jul 24 23:32:47 2021 +0900
+
+    send image url
+
+[33mcommit 3cc27041bff40ef6c961fc143cdf100cf5cd1e0b[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sat Jul 24 23:02:57 2021 +0900
+
+    fix many bugs
+
+[33mcommit 0ca154e0bf9910412d562b57a40d9fae92ec87be[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sat Jul 24 17:56:31 2021 +0900
+
+    zzz
+
+[33mcommit 5e3e723f9c4eabaa4fa8b2da5854170617d38c70[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sat Jul 24 17:50:47 2021 +0900
+
+    view improve
+
+[33mcommit afbf35f9b6aaa9203b0258828d4d878097024c3b[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Fri Jul 23 06:08:07 2021 +0900
+
+    UI
+
+[33mcommit abd0364abfbb6fb6e3da922a6c92542ce92620a9[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Fri Jul 23 02:52:44 2021 +0900
+
+    onImprove
+
+[33mcommit f33c14693d9970b8685fd156f353a71938906b08[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Wed Jul 21 18:37:44 2021 +0900
+
+    search engine update 1
+
+[33mcommit 7decf78cd33438f9116d57ed281474a24f65a4b2[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Wed Jul 21 18:19:32 2021 +0900
+
+    search engine develop
+
+[33mcommit 55ce73aec499f6e363ce17d1df5d877bc691ce0a[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Wed Jul 21 03:14:09 2021 +0900
+
+    trace issue push git 1
+
+[33mcommit 07e37299e6bee54680bc5168f5d3ebe0eddd4237[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sat Jul 17 17:18:03 2021 +0900
+
+    finished post issue
+
+[33mcommit 6d56d252661a622000a1f109191502c9b8544bfb[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Mon Jul 12 14:39:13 2021 +0900
+
+    add dept_id
+
+[33mcommit 22c86c4e4bcb03f5a63c3cd25d7f43c9ef70d2a4[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Mon Jul 12 12:40:32 2021 +0900
+
+    filter function code bo
+
+[33mcommit 44e7ede80fb7ba2e6da194070c769a2a3eb079d0[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Sun Jul 11 02:34:48 2021 +0900
+
+    fix successfully upload picture from camera and load location desc
+
+[33mcommit bc7fb3cfed0e7db26aa0ad0c742c5bb5fea2166b[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Fri Jul 9 17:44:42 2021 +0900
+
+    temp saving
+
+[33mcommit 5a15aac4358a1a592a2d3ddf714e56d9ec097b4d[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Thu Jul 8 01:15:38 2021 +0900
+
+    language
+
+[33mcommit 9611342f40f06b3c79667981bcbff7fb206b1c0a[m
+Author: dovanan95 <dovanan95@gmail.com>
+Date:   Wed Jul 7 21:21:43 2021 +0900
+
+    first commit
