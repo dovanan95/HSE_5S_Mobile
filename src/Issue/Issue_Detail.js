@@ -67,7 +67,7 @@ const Issue_Detail = ({route, navigation}) =>{
             
             navigation.navigate('issue_update',{'obj': route.params.obj});
         }
-        else if(ID_User != value || issuecom.issue.Status != 'Pending')
+        else if(ID_User != value || route.params.obj.issue.Status != 'Pending')
         {
             alert('You have no permission to update');
         }
