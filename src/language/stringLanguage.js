@@ -58,10 +58,13 @@ const stringLang =
             'reject_issue': 'Reject Issue',
             'update_history': 'Update History',
             'search_engine':'Search Engine',
+            
+        },
+        'issue_detail':{
             'name_issue': 'Name Issue',
             'content': ' Content',
             'location': 'Location',
-            'classification': 'Classification'
+            'classification': 'Classification',
         }
     },
     'kr':

@@ -7,7 +7,7 @@ import {Card, ListItem, Button, Icon, Input} from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import config from '../js_helper/configuration';
 import ngonngu from '../language/stringLanguage';
-import { TextInput } from "react-native-paper";
+import { TextInput, FAB, Searchbar, Divider } from "react-native-paper";
 
 const TraceIssue = ({route, navigation})=>{
 
@@ -403,7 +403,7 @@ const TraceIssue = ({route, navigation})=>{
 
     return(
         <SafeAreaView>
-            <Animated.View
+            {/*<Animated.View
                 style={[
                     //styles.header,
                     {
@@ -411,11 +411,16 @@ const TraceIssue = ({route, navigation})=>{
                         backgroundColor: animatedHeaderBackgroundColor
                     }
                 ]}>
-                <TouchableOpacity style={styles.input_content} onPress={()=> setModalControl(true)}>
-                        <Text>Search Engine</Text> 
-                </TouchableOpacity>
+                
                                 
-           </Animated.View>
+            </Animated.View>*/}
+            <TouchableOpacity style={{padding:12,
+                            justifyContent:'center',    
+                            backgroundColor: "blue",
+                            }}  onPress={()=> setModalControl(true)}>
+                        <Text style={{ color:'white',}}>Search Engine</Text> 
+                </TouchableOpacity>
+          
            <Input placeholder='Search...' 
            onChangeText={(text)=>{setTextSearch(text);
             setIsLocal(true);
@@ -462,6 +467,7 @@ const TraceIssue = ({route, navigation})=>{
                    {numRec?numRec.map((item,key)=>{
                        return(<Picker.Item label={item.keyNum.toString()} value={item.keyNum} key={key}/>)
                    }):<Picker.Item label='Loading...' value='id'/>}</Picker>
+                   <Divider/>
                    <View style={{flexDirection:'row'}}>
                        <View>
                             <TextInput style={styles.text_input} placeholder='Search' 
@@ -479,6 +485,7 @@ const TraceIssue = ({route, navigation})=>{
                             </TouchableOpacity>
                        </View>
                    </View>
+                   <Divider/>
                     <Text>Location</Text>
                         <Picker selectedValue={pick_location}
                             style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -491,6 +498,7 @@ const TraceIssue = ({route, navigation})=>{
                             }):<Picker.Item label='Location' value='loc_id'/>}
                             
                         </Picker>
+                        <Divider/>
                     <Text>Location Description</Text>
                         <Picker selectedValue={pick_locdes}
                             style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -501,6 +509,7 @@ const TraceIssue = ({route, navigation})=>{
                             }):<Picker.Item label='Location Description' value='locd_id'/>}
                             
                         </Picker>
+                        <Divider/>
                     <Text>Classification</Text>
                         <Picker selectedValue={pick_classify}
                             style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -509,6 +518,7 @@ const TraceIssue = ({route, navigation})=>{
                                 return <Picker.Item label={item.Name_Classify} value={item.ID_Classify} key={key} />
                             }):<Picker.Item label='Class' value='clas_id'/>}
                         </Picker>
+                        <Divider/>
                     <Text>Level</Text>
                         <Picker selectedValue={pick_loss}
                             style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -517,6 +527,7 @@ const TraceIssue = ({route, navigation})=>{
                                 return <Picker.Item label={item.Name_Level} value={item.ID_Level} key={key} />
                             }):<Picker.Item label='Loss' value='loss_id'/>}
                         </Picker>
+                        <Divider/>
                     <Text>Status</Text>
                             <Picker selectedValue={pick_status}
                             style={{height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -525,6 +536,7 @@ const TraceIssue = ({route, navigation})=>{
                                     return<Picker.Item label={item.status_key} value={item.status_key} key={key}/>
                                 })}
                             </Picker>
+                            <Divider/>
                     <View style={{flexDirection:'row'}}>
                         <Text>Start Date</Text>
                         <DatePicker
@@ -560,6 +572,7 @@ const TraceIssue = ({route, navigation})=>{
                             }}
                         />
                     </View>
+                    <Divider/>
                     <View style={{flexDirection:'row'}}>
                         <Text>Until Date</Text>
                         <DatePicker
@@ -589,6 +602,7 @@ const TraceIssue = ({route, navigation})=>{
                             }}
                         />
                     </View>
+                    <Divider/>
                     <View style={styles.buttonModalView}>
                         <TouchableOpacity style={styles.input}  
                             onPress={()=>{
@@ -664,6 +678,13 @@ const styles = StyleSheet.create(
             width: 300,
             height: 300,
             marginLeft:30
+        },
+        fab: {
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
         },
     }
 )

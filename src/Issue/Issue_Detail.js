@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image, 
     Picker, AsyncStorage, LogBox, ActivityIndicator,
     TouchableOpacity, SafeAreaView, FlatList, Animated } from "react-native";
+import {Divider} from 'react-native-paper'
 
 const Issue_Detail = ({route, navigation}) =>{
 
@@ -128,21 +129,31 @@ const Issue_Detail = ({route, navigation}) =>{
         <ScrollView>
             <View>           
                     <Text>ID: {route.params.obj.issue.ID_Issue}</Text>   
+                    <Divider/>
                     <Text>Name: {route.params.obj.issue.Name_Issue}</Text>
+                    <Divider/>
                    <Text>Content: {route.params.obj.issue.Content}</Text>
+                   <Divider/>
                    <Text>Location Detail: {route.params.obj.issue.Name_LocationDetail}</Text>
+                   <Divider/>
                    <Text>Classification: {route.params.obj.issue.Name_Classify}</Text>
+                   <Divider/>
                    <Text>Loss: {route.params.obj.issue.Name_Level}</Text>
+                   <Divider/>
                    <Text>Time Start: {route.params.obj.issue.Time_Start}</Text>
+                   <Divider/>
                    <Text>Deadline: {route.params.obj.issue.Deadline}</Text>
+                   <Divider/>
                    <Text>Department for Improvement:</Text>
                    <FlatList
                    data={route.params.obj.improve_dept}
                    renderItem={Item_Issue_Dept_View}
                    keyExtractor={(item, index)=> index.toString()}
                    />
+                   <Divider/>
 
                   <Image style={styles.image} source={{uri: 'http://' + route.params.obj.issue.Picture}}/>
+                  <Divider/>
                     
                    <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
                    <TouchableOpacity style={styles.input} onPress={()=> onUpdate(route.params.obj.issue.PIC)}>

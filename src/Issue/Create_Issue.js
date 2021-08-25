@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
     Picker, AsyncStorage, LogBox, Platform, PermissionsAndroid, 
     ActivityIndicator, TouchableOpacity, SafeAreaView, FlatList } from "react-native";
-import {TextInput, Button} from 'react-native-paper';
+import {TextInput, Button, Divider} from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ngonngu from '../language/stringLanguage';
 import MultiSelect from 'react-native-multiple-select'
@@ -366,7 +366,7 @@ return(
                         mode="outlined"
                         onChangeText={text => setContent( text )}
                     />
-            
+            <Divider/>
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.location:'loading...'}</Text>
             <Picker selectedValue={pick_location}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -380,6 +380,7 @@ return(
                 }):<Picker.Item label='Location' value='loc_id'/>}
                 
             </Picker>
+            <Divider/>
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.loc_desc:'loading...'}</Text>
             <Picker selectedValue={pick_locdes}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -391,6 +392,7 @@ return(
                 }):<Picker.Item label='Location Description' value='locd_id'/>}
                 
             </Picker>
+            <Divider/>
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.classification:'loading...'}</Text>
             <Picker selectedValue={pick_classify}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -399,7 +401,7 @@ return(
                     return <Picker.Item label={item.Name_Classify} value={item.ID_Classify} key={key} />
                 }):<Picker.Item label='Class' value='clas_id'/>}
             </Picker>
-
+            <Divider/>
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.loss:'loading...'}</Text>
             <Picker selectedValue={pick_loss}
                 style={{ height: 30, width: "98%", alignSelf: 'stretch'}}
@@ -408,7 +410,7 @@ return(
                     return <Picker.Item label={item.Name_Level} value={item.ID_Level} key={key} />
                 }):<Picker.Item label='Loss' value='loss_id'/>}
             </Picker>
-            
+            <Divider/>
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.dept:'loading...'}</Text>
             <MultiSelect
                 hideTags
@@ -431,6 +433,7 @@ return(
                 submitButtonColor="#48d22b"
                 submitButtonText="Submit"
             />
+            <Divider/>
             <View style={{flexDirection:'row'}}>
             <Text style={styles.input}>{lang?ngonngu.stringLang[lang].new_issue.deadline:'loading...'}</Text>
             <DatePicker
