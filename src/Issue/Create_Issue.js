@@ -31,7 +31,7 @@ const newIssue =({route, navigation}) =>{
     const[pick_loss, setPick_loss]=useState(1);
 
     const[dept, setDept]=useState([]);
-    const[pick_dept, setPick_dept]= useState('1');
+    const[pick_dept, setPick_dept]= useState(route.params?'':'1');
 
     const[date, setDate]=useState();
     const[today, setToday]=useState();
@@ -41,6 +41,8 @@ const newIssue =({route, navigation}) =>{
 
     const[modal, setModal]=useState(false);
     const[loading, setLoading]=useState(true);
+
+    const[ID_Issue, setID_Issue]=useState();
 
     useEffect(()=>{
         async function getItems()
@@ -62,16 +64,17 @@ const newIssue =({route, navigation}) =>{
                 locdescr.push(json_res_all['Table3'][k])
               }
             }
+            
             setLoc_desc(locdescr);
             
             setLoss(json_res_all['Table5']);
             setClassify(json_res_all['Table1']);
-            setDept(json_res_all['Table4']);
-            
+
             for(var key in json_res_all['Table4'])
             {
               json_res_all['Table4'][key].ID_Department = String(json_res_all['Table4'][key].ID_Department) 
             }
+            setDept(json_res_all['Table4']);
 
             const nn = await AsyncStorage.getItem('lang');
             setLang(nn);
@@ -82,6 +85,47 @@ const newIssue =({route, navigation}) =>{
             var yyyy=  homnay.getFullYear();
             homnay = yyyy+'-'+mm+'-'+dd;
             setToday(homnay);
+
+            if(route.params)
+            {
+              setPick_classify(route.params.obj.issue.ID_Classify);
+              setPick_locdes(route.params.obj.issue.ID_LocationD);
+              setPick_loss(route.params.obj.issue.ID_Loss);
+              setPicture(route.params.obj.issue.Picture);
+              setID_Issue(route.params.obj.issue.ID_Issue);
+              setName(route.params.obj.issue.Name_Issue);
+              setDate(route.params.obj.issue.Deadline);
+              setContent(route.params.obj.issue.Content);
+
+              var location_item;
+              for(var k in json_res_all['Table3'])
+              {
+                if(json_res_all['Table3'][k].ID_LocationD==route.params.obj.issue.ID_LocationD)
+                {
+                  setPick_location(json_res_all['Table3'][k].ID_Location);
+                  location_item = json_res_all['Table3'][k].ID_Location;
+                }
+              }
+              var locdescr_2=[];
+              for(var k in json_res_all['Table3'])
+              {
+                if(json_res_all['Table3'][k]['ID_Location']==location_item)
+                {
+                  locdescr_2.push(json_res_all['Table3'][k])
+                }
+              }
+              
+              setLoc_desc(locdescr_2);
+              
+              var department_imp = route.params.obj.improve_dept;
+              var dept_id_arr =[];
+              for(var key in department_imp)
+              {
+                department_imp[key].Team_Improve=String(department_imp[key].Team_Improve);
+                dept_id_arr.push(department_imp[key].Team_Improve);
+              }
+              setPick_dept(dept_id_arr);
+            }
           }
           catch(error)
           {
@@ -101,52 +145,61 @@ const newIssue =({route, navigation}) =>{
     const NEW_ISSUE = async()=>{
       try
       {
-        const result = await _send_to_server();
-        if(result[0] == 'OK')
-        {
-          var department=[];
-          for(var k in pick_dept)
+       if(route.params)
+       {
+        alert('route')
+       }
+       else 
+       {
+          const result = await _send_to_server();
+          if(result[0] == 'OK')
           {
-            department.push(parseInt(pick_dept[k]));
+            var department=[];
+            for(var k in pick_dept)
+            {
+              department.push(parseInt(pick_dept[k]));
+            }
+            const id_user = await AsyncStorage.getItem('id_user');
+            const settings ={
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(
+                  {
+                    'Name_issue': name,
+                    'LocationD_ID': pick_locdes,
+                    'PIC': id_user,
+                    'Time_Start': today,
+                    'Deadline': date + " 23:59:59",
+                    'ID_Classify':pick_classify,
+                    'Picture': result[1],
+                    'ID_Loss': pick_loss,
+                    'Content': content,
+                    'improvement': department
+                  }
+                )
+            };
+            var response = await fetch(config.api_server+'/api/HSE5S/PostIssue', settings);
+            var json_response = response.status;
+            if(json_response==200)
+            {
+              alert('OK');
+              console.log(pick_dept);
+            }
+            else
+            {
+              alert('Failed');
+              console.log(response);
+            }
           }
-          const id_user = await AsyncStorage.getItem('id_user');
-          const settings ={
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(
-                {
-                  'Name_issue': name,
-                  'LocationD_ID': pick_locdes,
-                  'PIC': id_user,
-                  'Time_Start': today,
-                  'Deadline': date + " 23:59:59",
-                  'ID_Classify':pick_classify,
-                  'Picture': result[1],
-                  'ID_Loss': pick_loss,
-                  'Content': content,
-                  'improvement': department
-                }
-              )
-          };
-          var response = await fetch(config.api_server+'/api/HSE5S/PostIssue', settings);
-          var json_response = response.status;
-          if(json_response==200)
+          else if(result == 'NG')
           {
-            alert('OK');
-          }
-          else
-          {
-            alert('Failed');
-            console.log(response);
-          }
-        }
-        else if(result == 'NG')
-        {
-          alert('Upload Image Failed!!!');
-        } 
+            alert('Upload Image Failed!!!');
+          } 
+       }
+        
       }
       catch(error)
       {
@@ -347,6 +400,26 @@ const newIssue =({route, navigation}) =>{
       setLoc_desc(locdescr);*/
     }
 
+    const Image_display=()=>{
+      if(route.params)
+      {    
+          return(
+            <Image
+                      source={{uri: 'http://' + route.params.obj.issue.Picture }}
+                      style={styles.imageStyle}
+                      />
+          )  
+      }
+      else 
+      {
+        return(
+          <Image
+                    source={{uri: picture.uri}}
+                    style={styles.imageStyle}/>
+        )
+      }
+    }
+
 return(
     <ScrollView>{loading?<ActivityIndicator size="small" color="#0000ff"/>:(
         <View style={styles.container}>
@@ -477,10 +550,16 @@ return(
              onRequestClose= {() => {setModal(false)}}
             >
                 <View style={styles.modalView}>
-                <Image
-                    source={{uri: picture.uri}}
+                {/*{route.params?<Image
+                    source={{uri: 'http://' + route.params.obj.issue.Picture }}
                     style={styles.imageStyle}
-                    />
+                    />:
+                    <Image
+                    source={{uri: picture.uri}}
+                    style={styles.imageStyle}/>}
+              
+                  */}
+                    <Image_display/>
                     <View style={styles.buttonModalView}>
                         <Button style={styles.input_content} mode="contained" onPress={() => _takePhoto()}>
                         {lang?ngonngu.stringLang[lang].new_issue.camera:'loading...'}

@@ -65,8 +65,8 @@ const Issue_Detail = ({route, navigation}) =>{
         var ID_User = await AsyncStorage.getItem('id_user');
         if(ID_User==value && route.params.obj.issue.Status == 'Pending')
         {
-            
-            navigation.navigate('issue_update',{'obj': route.params.obj});
+            //navigation.navigate('issue_update',{'obj': route.params.obj});
+            navigation.navigate('Create_Issue',{'obj': route.params.obj});
         }
         else if(ID_User != value || route.params.obj.issue.Status != 'Pending')
         {
