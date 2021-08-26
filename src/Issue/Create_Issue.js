@@ -98,20 +98,20 @@ const newIssue =({route, navigation}) =>{
               setContent(route.params.obj.issue.Content);
 
               var location_item;
-              for(var k in json_res_all['Table3'])
+              for(var i in json_res_all['Table3'])
               {
-                if(json_res_all['Table3'][k].ID_LocationD==route.params.obj.issue.ID_LocationD)
+                if(json_res_all['Table3'][i].ID_LocationD==route.params.obj.issue.ID_LocationD)
                 {
-                  setPick_location(json_res_all['Table3'][k].ID_Location);
-                  location_item = json_res_all['Table3'][k].ID_Location;
+                  setPick_location(json_res_all['Table3'][i].ID_Location);
+                  location_item = json_res_all['Table3'][i].ID_Location;
                 }
               }
               var locdescr_2=[];
-              for(var k in json_res_all['Table3'])
+              for(var key_loc in json_res_all['Table3'])
               {
-                if(json_res_all['Table3'][k]['ID_Location']==location_item)
+                if(json_res_all['Table3'][key_loc]['ID_Location']==location_item)
                 {
-                  locdescr_2.push(json_res_all['Table3'][k])
+                  locdescr_2.push(json_res_all['Table3'][key_loc])
                 }
               }
               
@@ -119,12 +119,13 @@ const newIssue =({route, navigation}) =>{
               
               var department_imp = route.params.obj.improve_dept;
               var dept_id_arr =[];
-              for(var key in department_imp)
+              for(var key_dept in department_imp)
               {
-                department_imp[key].Team_Improve=String(department_imp[key].Team_Improve);
-                dept_id_arr.push(department_imp[key].Team_Improve);
+                department_imp[key_dept].Team_Improve=String(department_imp[key_dept].Team_Improve);
+                dept_id_arr.push(department_imp[key_dept].Team_Improve);
               }
               setPick_dept(dept_id_arr);
+          
             }
           }
           catch(error)
