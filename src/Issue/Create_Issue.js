@@ -125,7 +125,7 @@ const newIssue =({route, navigation}) =>{
                 dept_id_arr.push(department_imp[key_dept].Team_Improve);
               }
               setPick_dept(dept_id_arr);
-          
+              
             }
           }
           catch(error)
@@ -146,21 +146,79 @@ const newIssue =({route, navigation}) =>{
     const NEW_ISSUE = async()=>{
       try
       {
+        var department=[];
+        for(var k in pick_dept)
+        {
+          department.push(parseInt(pick_dept[k]));
+        }
+        const id_user = await AsyncStorage.getItem('id_user');
        if(route.params)
        {
-        alert('route')
+        var len_pict_obj=Object.getOwnPropertyNames(picture).length;
+        if(len_pict_obj === 0)
+        {
+          const settings_1 ={
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                {
+                  'Name_issue': name,
+                  'LocationD_ID': pick_locdes,
+                  'PIC': id_user,
+                  'Time_Start': today,
+                  'Deadline': date + " 23:59:59",
+                  'ID_Classify':pick_classify,
+                  'Picture': picture_server_url,
+                  'ID_Loss': pick_loss,
+                  'Content': content,
+                  'improvement': department
+                }
+              )
+          };
+          console.log(settings_1);
+        }
+        else if(len_pict_obj > 0)
+        {
+          const result_par = await _send_to_server();
+          if(result_par[0]=='OK')
+          {
+            //restricted test
+            const settings_2 ={
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(
+                  {
+                    'Name_issue': name,
+                    'LocationD_ID': pick_locdes,
+                    'PIC': id_user,
+                    'Time_Start': today,
+                    'Deadline': date + " 23:59:59",
+                    'ID_Classify':pick_classify,
+                    'Picture': result_par[1],
+                    'ID_Loss': pick_loss,
+                    'Content': content,
+                    'improvement': department
+                  }
+                )
+            };
+          }
+          else if(result_par=='NG')
+          {
+            alert('Upload photo unsuccessfully!');
+          }
+        }
        }
        else 
        {
           const result = await _send_to_server();
           if(result[0] == 'OK')
           {
-            var department=[];
-            for(var k in pick_dept)
-            {
-              department.push(parseInt(pick_dept[k]));
-            }
-            const id_user = await AsyncStorage.getItem('id_user');
             const settings ={
               method: 'POST',
               headers: {
@@ -187,7 +245,6 @@ const newIssue =({route, navigation}) =>{
             if(json_response==200)
             {
               alert('OK');
-              console.log(pick_dept);
             }
             else
             {
@@ -402,7 +459,8 @@ const newIssue =({route, navigation}) =>{
     }
 
     const Image_display=()=>{
-      if(route.params)
+      var len_empty_picture = Object.getOwnPropertyNames(picture).length;
+      if(route.params && len_empty_picture==0)
       {    
           return(
             <Image
@@ -411,7 +469,15 @@ const newIssue =({route, navigation}) =>{
                       />
           )  
       }
-      else 
+      else if(route.params && len_empty_picture>0)
+      {
+        return(
+          <Image
+                    source={{uri: picture.uri}}
+                    style={styles.imageStyle}/>
+        )
+      }
+      else
       {
         return(
           <Image
