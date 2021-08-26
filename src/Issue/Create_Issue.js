@@ -91,7 +91,7 @@ const newIssue =({route, navigation}) =>{
               setPick_classify(route.params.obj.issue.ID_Classify);
               setPick_locdes(route.params.obj.issue.ID_LocationD);
               setPick_loss(route.params.obj.issue.ID_Loss);
-              setPicture(route.params.obj.issue.Picture);
+              setPicture_server_url(route.params.obj.issue.Picture);
               setID_Issue(route.params.obj.issue.ID_Issue);
               setName(route.params.obj.issue.Name_Issue);
               setDate(route.params.obj.issue.Deadline);
@@ -111,7 +111,7 @@ const newIssue =({route, navigation}) =>{
               {
                 if(json_res_all['Table3'][key_loc]['ID_Location']==location_item)
                 {
-                  locdescr_2.push(json_res_all['Table3'][key_loc])
+                  locdescr_2.push(json_res_all['Table3'][key_loc]);
                 }
               }
               
