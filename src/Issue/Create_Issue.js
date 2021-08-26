@@ -146,6 +146,7 @@ const newIssue =({route, navigation}) =>{
     const NEW_ISSUE = async()=>{
       try
       {
+        setLoading(true);
         var department=[];
         for(var k in pick_dept)
         {
@@ -263,8 +264,12 @@ const newIssue =({route, navigation}) =>{
       {
         alert(error);
       }
-     
+      finally
+      {
+        setLoading(false);
+      }
     }
+    
 
     const requestCameraPermission = async () => {
         if (Platform.OS === 'android') {
