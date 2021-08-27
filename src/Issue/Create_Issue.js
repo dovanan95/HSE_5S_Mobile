@@ -166,10 +166,9 @@ const newIssue =({route, navigation}) =>{
             },
             body: JSON.stringify(
                 {
+                  'ID_Issue': ID_Issue,
                   'Name_issue': name,
                   'LocationD_ID': pick_locdes,
-                  'PIC': id_user,
-                  'Time_Start': today,
                   'Deadline': date + " 23:59:59",
                   'ID_Classify':pick_classify,
                   'Picture': picture_server_url,
@@ -195,10 +194,9 @@ const newIssue =({route, navigation}) =>{
               },
               body: JSON.stringify(
                   {
+                    'ID_Issue': ID_Issue,
                     'Name_issue': name,
                     'LocationD_ID': pick_locdes,
-                    'PIC': id_user,
-                    'Time_Start': today,
                     'Deadline': date + " 23:59:59",
                     'ID_Classify':pick_classify,
                     'Picture': result_par[1],
