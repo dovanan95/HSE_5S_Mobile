@@ -178,7 +178,7 @@ const newIssue =({route, navigation}) =>{
                 }
               )
           };
-          console.log(settings_1);
+          //console.log(settings_1);
         }
         else if(len_pict_obj > 0)
         {
