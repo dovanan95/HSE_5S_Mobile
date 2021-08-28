@@ -216,7 +216,7 @@ const newIssue =({route, navigation}) =>{
                   }
                 )
             };
-            var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_1);
+            var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_2);
             var res_status = response.status();
             var res_text = response.text();
             if(res_status==200 && res_text=='OK')
