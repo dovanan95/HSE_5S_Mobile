@@ -178,7 +178,17 @@ const newIssue =({route, navigation}) =>{
                 }
               )
           };
-          //console.log(settings_1);
+          var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_1);
+          var res_status = response.status();
+          var res_text = response.text();
+          if(res_status==200 && res_text=='OK')
+          {
+            alert('OK');
+          }
+          else if(res_status!=200 && res_text!='OK')
+          {
+            alert('Failed');
+          }
         }
         else if(len_pict_obj > 0)
         {
@@ -206,6 +216,17 @@ const newIssue =({route, navigation}) =>{
                   }
                 )
             };
+            var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_1);
+            var res_status = response.status();
+            var res_text = response.text();
+            if(res_status==200 && res_text=='OK')
+            {
+              alert('OK');
+            }
+            else if(res_status!=200 && res_text!='OK')
+            {
+              alert('Failed');
+            }
           }
           else if(result_par=='NG')
           {
