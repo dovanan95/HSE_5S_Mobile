@@ -179,15 +179,15 @@ const newIssue =({route, navigation}) =>{
               )
           };
           var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_1);
-          var res_status = response.status();
-          var res_text = response.text();
+          var res_status = await response.status;
+          var res_text = await response.text();
           if(res_status==200 && res_text=='OK')
           {
             alert('OK');
           }
-          else if(res_status!=200 && res_text!='OK')
+          else if(res_status!=200 || res_text!='OK')
           {
-            alert('Failed');
+            alert(res_text);
           }
         }
         else if(len_pict_obj > 0)
@@ -217,15 +217,15 @@ const newIssue =({route, navigation}) =>{
                 )
             };
             var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_2);
-            var res_status = response.status();
-            var res_text = response.text();
+            var res_status = await response.status;
+            var res_text = await response.text();
             if(res_status==200 && res_text=='OK')
             {
               alert('OK');
             }
-            else if(res_status!=200 && res_text!='OK')
+            else if(res_status!=200 || res_text!='OK')
             {
-              alert('Failed');
+              alert(res_text);
             }
           }
           else if(result_par=='NG')
@@ -261,7 +261,7 @@ const newIssue =({route, navigation}) =>{
                 )
             };
             var response = await fetch(config.api_server+'/api/HSE5S/PostIssue', settings);
-            var json_response = response.status;
+            var json_response = await response.status;
             if(json_response==200)
             {
               alert('OK');
