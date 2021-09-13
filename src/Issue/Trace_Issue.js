@@ -106,7 +106,9 @@ const TraceIssue = ({route, navigation})=>{
                 setLoading(false);
             }
         }
+   
         initial();
+        
     },[])
 
     const onChangeLocation=async(input)=>{
@@ -119,21 +121,42 @@ const TraceIssue = ({route, navigation})=>{
           }
         }
         setLoc_desc(locdescr);
+        setPick_locdes(locdescr[0].ID_LocationD);
     }
 
     const onDetail =async({item})=>{
         try
         {
             setLoading(true);
-            var res_dept = await fetch(config.api_server 
-                + '/api/HSE5S/getDeptImprove?ID_Issue='
-                + item.ID_Issue.toString());
-            var res_dept_json = await res_dept.json();
-    
-            //setModal(true);
-            setIssuecom({'issue': item, 'improve_dept': res_dept_json});
-            var obj={'issue': item, 'improve_dept': res_dept_json}
-            navigation.navigate('issue_detail',{'obj': obj});
+            if(route.params && item.ID_Issue==route.params['obj']['ID_Issue'])
+            {
+                let res_dept = await fetch(config.api_server 
+                    + '/api/HSE5S/getDeptImprove?ID_Issue='
+                    + route.params['obj']['ID_Issue'].toString());
+                let res_dept_json = await res_dept.json();
+
+                let res_update_issue = await fetch(config.api_server
+                    + '/api/HSE5S/SearchIssueByID?ID_Issue='
+                    + route.params['obj']['ID_Issue']);
+                let res_update_obj = await res_update_issue.json();
+
+                setIssuecom({'issue': res_update_obj[0], 'improve_dept': res_dept_json});
+                var obj={'issue': res_update_obj[0], 'improve_dept': res_dept_json}
+                navigation.navigate('issue_detail',{'obj': obj});
+            } 
+            else
+            {
+                let res_dept = await fetch(config.api_server 
+                    + '/api/HSE5S/getDeptImprove?ID_Issue='
+                    + item.ID_Issue.toString());
+                let res_dept_json = await res_dept.json();
+        
+                //setModal(true);
+                setIssuecom({'issue': item, 'improve_dept': res_dept_json});
+                var obj={'issue': item, 'improve_dept': res_dept_json}
+                navigation.navigate('issue_detail',{'obj': obj});
+            }
+            
         }
         catch(error)
         {
@@ -219,6 +242,7 @@ const TraceIssue = ({route, navigation})=>{
     const onSelectNumRec = async(value)=>{
         try
         {
+            setLoading(true);
             var res = await fetch(config.api_server 
                 +'/api/HSE5S/TraceGeneralIssue?numberRecord='
                 +value.toString());
@@ -228,6 +252,10 @@ const TraceIssue = ({route, navigation})=>{
         catch(error)
         {
             alert(error);
+        }
+        finally
+        {
+            setLoading(false);
         }
         
     }

@@ -185,9 +185,8 @@ const newIssue =({route, navigation}) =>{
           var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_1);
           var res_status = await response.status;
           var res_text = await response.text();
-          if(res_status==200 && res_text=='OK')
+          if(res_status==200 || res_text=='OK')
           {
-  
             Alert.alert(
               "OK",
               "Stay or leaving?",
@@ -198,12 +197,10 @@ const newIssue =({route, navigation}) =>{
                 },
                 {
                   text:"Exit",
-                  onPress:()=>{navigation.navigate('issue_trace')}
+                  onPress:()=>{navigation.navigate('issue_trace',{'obj': JSON.parse(settings_1.body)})}
                 }
               ]
             )
-            
-            //navigation.navigate('issue_trace');
           }
           else if(res_status!=200 || res_text!='OK')
           {
@@ -239,9 +236,8 @@ const newIssue =({route, navigation}) =>{
             var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_2);
             var res_status = await response.status;
             var res_text = await response.text();
-            if(res_status==200 && res_text=='OK')
+            if(res_status==200 || res_text=='OK')
             {
-        
               Alert.alert(
                 "OK",
                 "Stay or leaving?",
@@ -252,7 +248,7 @@ const newIssue =({route, navigation}) =>{
                   },
                   {
                     text:"Exit",
-                    onPress:()=>{navigation.navigate('issue_trace')}
+                    onPress:()=>{navigation.navigate('issue_trace', {'obj': JSON.parse(settings_2.body)})}
                   }
                 ]
               )
