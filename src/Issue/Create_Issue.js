@@ -8,6 +8,7 @@ import ngonngu from '../language/stringLanguage';
 import MultiSelect from 'react-native-multiple-select'
 import DatePicker from 'react-native-datepicker';
 import config from '../js_helper/configuration';
+import { min } from "react-native-reanimated";
 
 const newIssue =({route, navigation}) =>{
 
@@ -94,7 +95,9 @@ const newIssue =({route, navigation}) =>{
               setPicture_server_url(route.params.obj.issue.Picture);
               setID_Issue(route.params.obj.issue.ID_Issue);
               setName(route.params.obj.issue.Name_Issue);
-              setDate(route.params.obj.issue.Deadline);
+
+              let date_route = route.params.obj.issue.Deadline;
+              setDate(String(date_route).substring(0,10));
               setContent(route.params.obj.issue.Content);
 
               var location_item;
@@ -178,12 +181,29 @@ const newIssue =({route, navigation}) =>{
                 }
               )
           };
+        
           var response = await fetch(config.api_server+'/api/HSE5S/UpdateIssue', settings_1);
           var res_status = await response.status;
           var res_text = await response.text();
           if(res_status==200 && res_text=='OK')
           {
-            alert('OK');
+  
+            Alert.alert(
+              "OK",
+              "Stay or leaving?",
+              [
+                {
+                  text:"Continue Update",
+                  onPress:()=>{console.log('stay')}
+                },
+                {
+                  text:"Exit",
+                  onPress:()=>{navigation.navigate('issue_trace')}
+                }
+              ]
+            )
+            
+            //navigation.navigate('issue_trace');
           }
           else if(res_status!=200 || res_text!='OK')
           {
@@ -221,7 +241,21 @@ const newIssue =({route, navigation}) =>{
             var res_text = await response.text();
             if(res_status==200 && res_text=='OK')
             {
-              alert('OK');
+        
+              Alert.alert(
+                "OK",
+                "Stay or leaving?",
+                [
+                  {
+                    text:"Continue Update",
+                    onPress:()=>{console.log('stay')}
+                  },
+                  {
+                    text:"Exit",
+                    onPress:()=>{navigation.navigate('issue_trace')}
+                  }
+                ]
+              )
             }
             else if(res_status!=200 || res_text!='OK')
             {
@@ -264,7 +298,7 @@ const newIssue =({route, navigation}) =>{
             var json_response = await response.status;
             if(json_response==200)
             {
-              alert('OK');
+              alert('OKE');
             }
             else
             {
@@ -474,6 +508,7 @@ const newIssue =({route, navigation}) =>{
         }
       }
       setLoc_desc(locdescr);
+      setPick_locdes(locdescr[0].ID_LocationD);
       /*var locdescr = locd_temp.filter(function(item){
         return item.ID_Location == input;
       }).map(function({ID_LocationD, Name_LocationDetail}){
