@@ -51,24 +51,23 @@ const Issue_Detail = ({route, navigation}) =>{
                 flag_perm=1;
             }
         }
-        if(flag_dept==1 && flag_perm==1 && route.params.obj.issue.Status =='Pending')
+        if(flag_dept==1 && flag_perm==1 && String(route.params.obj.issue.Status).toLowerCase()=='pending')
         {
-           
+            //console.log(String(route.params.obj.issue.Status).toLowerCase());
             navigation.navigate('create_imp', {'ID':value})
         }
-        else if(flag_dept==0 || flag_perm==0 || route.params.obj.issue.Status != 'Pending')
+        else if(flag_dept==0 || flag_perm==0 || String(route.params.obj.issue.Status).toLowerCase() !='pending')
         {
             alert('You have no permission to improve this issue');
         }
     }
     const onUpdate = async(value)=>{
         var ID_User = await AsyncStorage.getItem('id_user');
-        if(ID_User==value && route.params.obj.issue.Status == 'Pending')
+        if(ID_User==value && String(route.params.obj.issue.Status).toLowerCase()=='pending')
         {
-            //navigation.navigate('issue_update',{'obj': route.params.obj});
             navigation.navigate('Create_Issue',{'obj': route.params.obj});
         }
-        else if(ID_User != value || route.params.obj.issue.Status != 'Pending')
+        else if(ID_User != value || String(route.params.obj.issue.Status).toLowerCase() !='pending')
         {
             alert('You have no permission to update');
         }

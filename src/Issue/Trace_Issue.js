@@ -141,7 +141,7 @@ const TraceIssue = ({route, navigation})=>{
                 let res_update_obj = await res_update_issue.json();
 
                 setIssuecom({'issue': res_update_obj[0], 'improve_dept': res_dept_json});
-                var obj={'issue': res_update_obj[0], 'improve_dept': res_dept_json}
+                let obj={'issue': res_update_obj[0], 'improve_dept': res_dept_json}
                 navigation.navigate('issue_detail',{'obj': obj});
             } 
             else
@@ -153,7 +153,7 @@ const TraceIssue = ({route, navigation})=>{
         
                 //setModal(true);
                 setIssuecom({'issue': item, 'improve_dept': res_dept_json});
-                var obj={'issue': item, 'improve_dept': res_dept_json}
+                let obj={'issue': item, 'improve_dept': res_dept_json}
                 navigation.navigate('issue_detail',{'obj': obj});
             }
             
@@ -216,24 +216,24 @@ const TraceIssue = ({route, navigation})=>{
                 flag_perm=1;
             }
         }
-        if(flag_dept==1 && flag_perm==1 && issuecom.issue.Status =='Pending')
+        if(flag_dept==1 && flag_perm==1 && String(route.params.obj.issue.Status).toLowerCase()=='pending')
         {
             setModal(false);
             navigation.navigate('create_imp', {'ID':value})
         }
-        else if(flag_dept==0 || flag_perm==0 || issuecom.issue.Status != 'Pending')
+        else if(flag_dept==0 || flag_perm==0 || String(route.params.obj.issue.Status).toLowerCase() !='pending')
         {
             alert('You have no permission to improve this issue');
         }
     }
     const onUpdate = async(value)=>{
         var ID_User = await AsyncStorage.getItem('id_user');
-        if(ID_User==value && issuecom.issue.Status == 'Pending')
+        if(ID_User==value && String(route.params.obj.issue.Status).toLowerCase()=='pending')
         {
             setModal(false);
             navigation.navigate('issue_update',{'obj': issuecom});
         }
-        else if(ID_User != value || issuecom.issue.Status != 'Pending')
+        else if(ID_User != value || String(route.params.obj.issue.Status).toLowerCase() !='pending')
         {
             alert('You have no permission to update');
         }

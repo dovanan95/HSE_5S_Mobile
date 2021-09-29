@@ -4,7 +4,7 @@ import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
     TouchableOpacity, SafeAreaView, FlatList, Animated } from "react-native";
 
 const Improvement_History = ({route, navigation}) =>{
-
+    //Full improvement history
     return(
         <Text>Hi</Text>
     )

@@ -5,6 +5,7 @@ import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
 
 
 const Improvement_Trace = ({route, navigation}) =>{
+    //Trace improvement by Issue ID
     return(
         <Text>Hi</Text>
     )
