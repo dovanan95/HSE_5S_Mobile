@@ -18,19 +18,13 @@ const Create_Imp = ({route, navigation}) =>{
     useEffect(()=>{
         function initial()
         {
-            try
-            {
+            try{
                 console.log('start improve');
-            }
-            catch(error)
-            {
+            }catch(error){
                 alert(error);
-            }
-            finally
-            {
+            }finally{
                 setLoading(false);
             }
-
         }
         initial();
     },[])
@@ -62,7 +56,7 @@ const Create_Imp = ({route, navigation}) =>{
                     'Content': content,
                     'Team_Improve': parseInt(dept),
                     'Picture': result[1],
-                    'Time_Improved': getDate() + " 23:59:59",
+                    'Time_Improved': getDate(),
                   }
                 )
         };

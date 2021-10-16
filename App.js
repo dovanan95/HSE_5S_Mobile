@@ -24,6 +24,7 @@ import Imp_Hist from './src/Improvement/Imp_Hist';
 import Trace_Imp from './src/Improvement/Trace_Imp';
 import Create_Imp from './src/Improvement/Create_Imp';
 import My_Improvement from './src/Improvement/My_Imp';
+import Improvement_Detail from './src/Improvement/Improvement_Detail';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -103,6 +104,19 @@ function App() {
           <Stack.Screen
           name="improvement_trace_by_issue"
           component={Trace_Imp}
+          options={{
+            title:'Improvement',
+            headerStyle: {
+              backgroundColor: '#FF1493', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}/>
+           <Stack.Screen
+          name="improvement_detail"
+          component={Improvement_Detail}
           options={{
             title:'Improvement',
             headerStyle: {
