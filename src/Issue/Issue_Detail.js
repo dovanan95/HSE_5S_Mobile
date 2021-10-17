@@ -65,37 +65,69 @@ const Issue_Detail = ({route, navigation}) =>{
     }
 
     const onImprove = async(value)=>{
-        var deptt = await AsyncStorage.getItem('dept');
-        const permitt = await AsyncStorage.getItem('permission');
-        const perm = JSON.parse(permitt);
-
-        var res_dept_json = dept;
-        var flag_dept = 0;
-        for(var k in res_dept_json)
+        try
         {
-            if(deptt==res_dept_json[k]['Team_Improve'])
+            setLoading(true);
+            var deptt = await AsyncStorage.getItem('dept');
+            const permitt = await AsyncStorage.getItem('permission');
+            const perm = JSON.parse(permitt);
+
+            var res_dept_json = dept;
+            var flag_dept = 0;
+
+            var res = await fetch(config.api_server 
+                + '/api/HSE5S/traceImpByIssue?ID_Issue='
+                + ID_Issue);
+            var json_res = await res.json();
+            
+            var imp_status;
+            for(var imp in json_res)
             {
-                flag_dept=1;
+                if(json_res[imp].Team_Improve==deptt)
+                {
+                    imp_status=json_res[imp].Status;
+                }
+            }
+
+            for(var k in res_dept_json)
+            {
+                if(deptt==res_dept_json[k]['Team_Improve'])
+                {
+                    flag_dept=1;
+                }
+            }
+
+            var flag_perm =0;
+            for(var kk in perm)
+            {
+                if(perm[kk]['Name_Function']=='Create_Improvement')
+                {
+                    flag_perm=1;
+                }
+            }
+            if(flag_dept==1 && flag_perm==1 && String(issue.Status).toLowerCase()=='pending' 
+                && String(imp_status).toLowerCase()!='approve')
+            {
+                navigation.navigate('create_imp', {'ID':value})
+            }
+            else if(flag_dept==0 || flag_perm==0 || String(issue.Status).toLowerCase() !='pending')
+            {
+                alert('You have no permission to improve this issue');
+            }
+            else if(String(imp_status).toLowerCase()=='approve')
+            {
+                alert('You improved this issue');
             }
         }
-
-        var flag_perm =0;
-        for(var kk in perm)
+        catch(error)
         {
-            if(perm[kk]['Name_Function']=='Create_Improvement')
-            {
-                flag_perm=1;
-            }
+            alert(error);
         }
-        if(flag_dept==1 && flag_perm==1 && String(issue.Status).toLowerCase()=='pending')
+        finally
         {
-            //console.log(String(route.params.obj.issue.Status).toLowerCase());
-            navigation.navigate('create_imp', {'ID':value})
+            setLoading(false);
         }
-        else if(flag_dept==0 || flag_perm==0 || String(issue.Status).toLowerCase() !='pending')
-        {
-            alert('You have no permission to improve this issue');
-        }
+        
     }
     const onUpdate = async(value)=>{
         var ID_User = await AsyncStorage.getItem('id_user');

@@ -84,6 +84,7 @@ const Improvement_Trace = ({route, navigation}) =>{
                             <Text>UPDATE</Text> 
                         </TouchableOpacity>
                     </View>
+                    <Text>{item.Status}</Text>
                     </Card>
                     
                 </View>
