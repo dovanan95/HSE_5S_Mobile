@@ -110,7 +110,6 @@ const Improvement_Detail=({route, navigation})=>{
         {
             setLoading(false);
         }
-        
 
     }
 

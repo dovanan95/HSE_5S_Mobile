@@ -3,8 +3,44 @@ import { View, Text, Alert, Modal, StyleSheet, ScrollView, Image,
     Picker, AsyncStorage, LogBox, ActivityIndicator,
     TouchableOpacity, SafeAreaView, FlatList, Animated } from "react-native";
 import {Divider} from 'react-native-paper';
+import config from '../js_helper/configuration';
 
 const Issue_Detail = ({route, navigation}) =>{
+    const[loading, setLoading]=useState(true);
+    const[issue, setIssue]=useState();
+    const[dept, setDept]=useState();
+
+    const ID_Issue = route.params.ID;
+
+    useEffect(()=>{
+        async function initial()
+        {
+            try
+            {
+                let res = await fetch(config.api_server 
+                    + '/api/HSE5S/SearchIssueByID?ID_Issue='
+                    + ID_Issue);
+                let res_json = await res.json();
+                console.log(res_json[0].Name_LocationDetail);
+                setIssue(res_json[0]);
+
+                let res_dept = await fetch(config.api_server 
+                    + '/api/HSE5S/getDeptImprove?ID_Issue='
+                    + ID_Issue);
+                let res_dept_json = await res_dept.json();
+                setDept(res_dept_json);
+            }
+            catch(error)
+            {
+                alert(error);
+            }
+            finally
+            {
+                setLoading(false);
+            }
+        }
+        initial();
+    },[])
 
     const onViewImp =async(value)=>{
         const permitt = await AsyncStorage.getItem('permission');
@@ -29,15 +65,15 @@ const Issue_Detail = ({route, navigation}) =>{
     }
 
     const onImprove = async(value)=>{
-        var dept = await AsyncStorage.getItem('dept');
+        var deptt = await AsyncStorage.getItem('dept');
         const permitt = await AsyncStorage.getItem('permission');
         const perm = JSON.parse(permitt);
 
-        var res_dept_json = route.params.obj.improve_dept;
+        var res_dept_json = dept;
         var flag_dept = 0;
         for(var k in res_dept_json)
         {
-            if(dept==res_dept_json[k]['Team_Improve'])
+            if(deptt==res_dept_json[k]['Team_Improve'])
             {
                 flag_dept=1;
             }
@@ -51,23 +87,24 @@ const Issue_Detail = ({route, navigation}) =>{
                 flag_perm=1;
             }
         }
-        if(flag_dept==1 && flag_perm==1 && String(route.params.obj.issue.Status).toLowerCase()=='pending')
+        if(flag_dept==1 && flag_perm==1 && String(issue.Status).toLowerCase()=='pending')
         {
             //console.log(String(route.params.obj.issue.Status).toLowerCase());
             navigation.navigate('create_imp', {'ID':value})
         }
-        else if(flag_dept==0 || flag_perm==0 || String(route.params.obj.issue.Status).toLowerCase() !='pending')
+        else if(flag_dept==0 || flag_perm==0 || String(issue.Status).toLowerCase() !='pending')
         {
             alert('You have no permission to improve this issue');
         }
     }
     const onUpdate = async(value)=>{
         var ID_User = await AsyncStorage.getItem('id_user');
-        if(ID_User==value && String(route.params.obj.issue.Status).toLowerCase()=='pending')
+        if(ID_User==value && String(issue.Status).toLowerCase()=='pending')
         {
-            navigation.navigate('Create_Issue',{'obj': route.params.obj});
+            let obj={'issue': issue, 'improve_dept': dept}
+            navigation.navigate('Create_Issue',{'obj': obj});
         }
-        else if(ID_User != value || String(route.params.obj.issue.Status).toLowerCase() !='pending')
+        else if(ID_User != value || String(issue.Status).toLowerCase() !='pending')
         {
             alert('You have no permission to update');
         }
@@ -83,87 +120,46 @@ const Issue_Detail = ({route, navigation}) =>{
         )
     }
 
-    const Detail_Issue = (props)=> {
-        return(
-            <ScrollView style={styles.modalView}>
-                    <Text>ID: {props.ID_Issue}</Text>   
-                    <Text>Name: {props.Name}</Text>
-                   <Text>Content: {props.Content}</Text>
-                   <Text>Location Detail: {props.locationD}</Text>
-                   <Text>Classification: {props.Classify}</Text>
-                   <Text>Loss: {props.Level}</Text>
-                   <Text>Time Start: {props.time_start}</Text>
-                   <Text>Deadline: {props.deadline}</Text>
-                   <Text>Department for Improvement:</Text>
-                   <FlatList
-                   data={props.improve_dept}
-                   renderItem={Item_Issue_Dept_View}
-                   keyExtractor={(item, index)=> index.toString()}
-                   />
-
-                  <Image style={styles.image} source={{uri: 'http://' + props.Picture}}/>
-                    
-                   <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> onUpdate(props.PIC)}>
-                        <Text style={{color:'white'}}>UPDATE</Text> 
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.input} onPress={()=> onImprove(props.ID_Issue)}>
-                        <Text style={{color:'white'}}>IMPROVE</Text> 
-                    </TouchableOpacity> 
-                   </View>
-                   <View style={{flexDirection:'row',alignItems:'center',justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> onViewImp(props.ID_Issue)}>
-                        <Text style={{color:'white'}}> VIEW IMPROVEMENT</Text> 
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.input} onPress={()=> {navigation.goBack()}}>
-                        <Text style={{color:'white'}}> EXIT</Text> 
-                    </TouchableOpacity>  
-                   </View>
-            </ScrollView>
-        )
-    }
-
-
     return(
-        <ScrollView>
+        <ScrollView>{loading?<ActivityIndicator size="small" color="#0000ff"/>:
             <View>           
-                    <Text>ID: {route.params.obj.issue.ID_Issue}</Text>   
+                    <Text>ID: {issue?issue.ID_Issue:'loading...'}</Text>   
                     <Divider/>
-                    <Text>Name: {route.params.obj.issue.Name_Issue}</Text>
+                    <Text>Name: {issue? issue.Name_Issue:'loading...'}</Text>
                     <Divider/>
-                   <Text>Content: {route.params.obj.issue.Content}</Text>
+                   <Text>Content: {issue?issue.Content:'loading...'}</Text>
                    <Divider/>
-                   <Text>Location Detail: {route.params.obj.issue.Name_LocationDetail}</Text>
+                   <Text>Location Detail: {issue?issue.Name_LocationDetail:'loading...'}</Text>
                    <Divider/>
-                   <Text>Classification: {route.params.obj.issue.Name_Classify}</Text>
+                   <Text>Classification: {issue?issue.Name_Classify:'loading...'}</Text>
                    <Divider/>
-                   <Text>Loss: {route.params.obj.issue.Name_Level}</Text>
+                   <Text>Loss: {issue?issue.Name_Level:'loading...'}</Text>
                    <Divider/>
-                   <Text>Time Start: {route.params.obj.issue.Time_Start}</Text>
+                   <Text>Time Start: {issue?issue.Time_Start:'loading...'}</Text>
                    <Divider/>
-                   <Text>Deadline: {route.params.obj.issue.Deadline}</Text>
+                   <Text>Deadline: {issue?issue.Deadline:'loading...'}</Text>
                    <Divider/>
                    <Text>Department for Improvement:</Text>
                    <FlatList
-                   data={route.params.obj.improve_dept}
+                   data={dept?dept:{'data': 'data'}}
                    renderItem={Item_Issue_Dept_View}
                    keyExtractor={(item, index)=> index.toString()}
                    />
                    <Divider/>
 
-                  <Image style={styles.image} source={{uri: 'http://' + route.params.obj.issue.Picture}}/>
+                  {issue?<Image style={styles.image} source={{uri: 'http://' + issue.Picture}}/>:<Text>Picture unavailable</Text>}
                   <Divider/>
                     
                    <View style={{flexDirection:'row',alignItems:'center', justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> onUpdate(route.params.obj.issue.PIC)}>
+                   <TouchableOpacity style={styles.input} onPress={()=> onUpdate(issue.PIC)}>
                         <Text style={{color:'white'}}>UPDATE</Text> 
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.input} onPress={()=> onImprove(route.params.obj.issue.ID_Issue)}>
+                    <TouchableOpacity style={styles.input} onPress={()=> onImprove(issue.ID_Issue)}>
                         <Text style={{color:'white'}}>IMPROVE</Text> 
                     </TouchableOpacity> 
                    </View>
                    <View style={{flexDirection:'row',alignItems:'center',justifyContent: "center",}}>
-                   <TouchableOpacity style={styles.input} onPress={()=> onViewImp(route.params.obj.issue.ID_Issue)}>
+                   <TouchableOpacity style={styles.input} onPress={()=> onViewImp(issue.ID_Issue)}>
                         <Text style={{color:'white'}}> VIEW IMPROVEMENT</Text> 
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.input} onPress={()=> {navigation.goBack()}}>
@@ -171,7 +167,7 @@ const Issue_Detail = ({route, navigation}) =>{
                     </TouchableOpacity>  
                    </View>
 
-            </View>
+            </View>}
         
         </ScrollView>
         

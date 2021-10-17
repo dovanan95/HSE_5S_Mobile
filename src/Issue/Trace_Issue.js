@@ -127,6 +127,7 @@ const TraceIssue = ({route, navigation})=>{
     const onDetail =async({item})=>{
         try
         {
+            /*
             setLoading(true);
             if(route.params && item.ID_Issue==route.params['obj']['ID_Issue'])
             {
@@ -155,7 +156,8 @@ const TraceIssue = ({route, navigation})=>{
                 setIssuecom({'issue': item, 'improve_dept': res_dept_json});
                 let obj={'issue': item, 'improve_dept': res_dept_json}
                 navigation.navigate('issue_detail',{'obj': obj});
-            }
+            }*/
+            navigation.navigate('issue_detail',{'ID': item.ID_Issue});
             
         }
         catch(error)
