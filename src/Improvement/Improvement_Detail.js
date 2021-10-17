@@ -74,7 +74,7 @@ const Improvement_Detail=({route, navigation})=>{
                     }
                   )
             }
-            if(id_user==id_user_server)
+            if(id_user==id_user_server && String(status).toLowerCase()!=value)
             {
                 var response = await fetch(config.api_server+'/api/HSE5S/ImproveDecision', settings);
                 var json_response = await response.status;
@@ -88,7 +88,7 @@ const Improvement_Detail=({route, navigation})=>{
                     var json_res = await res.json();
                     setStatus(json_res[0].Status)
                 }
-                else
+                else 
                 {
                     alert('failed');
                 }
@@ -96,6 +96,10 @@ const Improvement_Detail=({route, navigation})=>{
             else if(id_user != id_user_server)
             {
                 alert('no permission');
+            }
+            else if(String(status).toLowerCase()==value)
+            {
+                alert('This improvement was '+ value);
             }
         }
         catch(error)
@@ -138,7 +142,8 @@ const Improvement_Detail=({route, navigation})=>{
                     </TouchableOpacity> 
                    </View>
                    <View style={{flexDirection:'row',alignItems:'center',justifyContent: "center",}}>
-                    <TouchableOpacity style={styles.input} onPress={()=> {navigation.goBack()}}>
+                    <TouchableOpacity style={styles.input} 
+                    onPress={()=> {navigation.navigate('improvement_trace_by_issue', {'ID': id_issue});}}>
                         <Text style={{color:'white'}}> EXIT</Text> 
                     </TouchableOpacity>  
                    </View>
